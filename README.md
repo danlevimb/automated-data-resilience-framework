@@ -1,40 +1,137 @@
-# SQL Server Automated Backup & Recovery Framework
+# Automated Data Resilience Framework
+### Backup, Restore Validation & Recovery Automation for SQL Server
 
-A production-oriented framework to automate **backup, verification, retention cleanup, and restore workflows** for Microsoft SQL Server.  
-Designed to demonstrate DBA best practices around **RPO/RTO**, reliability, and operational discipline.
+---
 
-## Key Features
-- Full / Differential / Transaction Log backup automation
-- Backup verification and integrity checks
-- Retention cleanup (policy-based)
-- Restore runbook (full, full+diff, point-in-time)
-- Logging and audit trail of operations
-- SQL Agent job templates for scheduling
+## 📌 Executive Summary
 
-## Tech Stack
-- Microsoft SQL Server (2016+ recommended; tested on 2022 Developer Edition)
-- T-SQL
-- SQL Server Agent (jobs & schedules)
+This project implements an automated Backup & Recovery framework designed to ensure data resilience, restore reliability, and operational validation in SQL Server 2022 environments.
 
-## Repository Structure
-- `docs/` → documentation & runbooks
-- `scripts/` → backup/restore scripts and support objects
-- `jobs/` → SQL Agent job scripts/exports
-- `config/` → configurable variables/templates
-- `samples/` → demo walkthrough and sample database setup
+Unlike traditional backup implementations that focus only on backup generation, this framework introduces automated restore validation testing to guarantee recoverability and minimize operational risk.
 
-## Quick Start (Local Demo)
-1. Create a test database using `samples/sample_db_setup.sql`
-2. Run prerequisites in `scripts/00-prerequisites/`
-3. Configure variables in `config/variables.example.sql`
-4. Execute a full backup from `scripts/01-backups/full_backup.sql`
-5. Validate using `scripts/01-backups/verify_backups.sql`
+The system integrates:
 
-## RPO / RTO Strategy
-See `docs/02-rpo-rto-strategy.md`
+- Automated backup orchestration
+- Point-in-time recovery capability
+- Restore validation testing
+- Logging and observability mechanisms
+- Disaster recovery simulation
 
-## Restore Runbook
-See `docs/03-restore-runbook.md`
+---
 
-## License
-MIT
+## 🚨 Problem Statement
+
+Backups are often assumed to work — but rarely tested under real failure scenarios.
+
+In many production environments:
+
+- Restore procedures are manual
+- Backup integrity is not validated regularly
+- Recovery Time Objective (RTO) is unknown
+- Recovery Point Objective (RPO) is not measured
+
+This project addresses those gaps by implementing automated restore validation workflows and logging mechanisms to ensure backup reliability.
+
+---
+
+## 🎯 Engineering Objectives
+
+- Automate full, differential and log backups
+- Enable point-in-time recovery
+- Validate backup integrity through automated restore tests
+- Log execution and errors for traceability
+- Simulate failure scenarios
+- Reduce operational recovery risk
+
+---
+
+## 🏗 High-Level Architecture
+
+The framework follows a modular architecture:
+
+1. Backup Layer  
+   - Full / Differential / Log backups  
+   - Retention strategy  
+   - Storage structure organization  
+
+2. Restore Validation Layer  
+   - Automated restore to validation environment  
+   - Integrity checks  
+   - Cleanup process  
+
+3. Logging & Observability Layer  
+   - Execution logs  
+   - Error tracking  
+   - Restore metrics  
+
+4. Automation Layer  
+   - SQL Server Agent job orchestration  
+   - Scheduled execution  
+   - Dependency management  
+
+---
+
+## ⭐ Restore Validation Framework
+
+The core innovation of this project is the automated restore validation mechanism.
+
+The workflow:
+
+1. Create the valid backup chain  
+2. Restore database into validation instance  
+3. Apply transaction logs up to defined point-in-time (STOPAT / STOPBEFOREMARK)
+4. Execute validation checks  
+5. Log execution results  
+6. Drop validation database  
+
+This ensures that backups are not only generated — but tested and verified for recoverability.
+
+---
+
+## 🛠 Technologies Used
+
+- SQL Server 2022 Developer Edition
+- T-SQL (Stored Procedures & Automation Logic)
+- SQL Server Agent
+- Custom logging schema
+- Structured folder-based backup storage
+
+---
+
+## ▶ How to Run
+
+1. Deploy schema objects under `sql/schema/`
+2. Deploy stored procedures under `sql/stored_procedures/`
+3. Configure environment paths in configuration tables
+4. Create SQL Agent jobs using scripts under `sql/jobs/`
+5. Execute restore validation procedure manually for testing
+
+Detailed deployment instructions are available in `/docs`.
+
+---
+
+## 📊 Reliability & Engineering Principles Applied
+
+- Recovery-first mindset
+- Idempotent execution design
+- Modular stored procedure architecture
+- Failure scenario simulation
+- Observability through structured logging
+- RTO/RPO awareness
+
+---
+
+## 🚀 Future Improvements
+
+- Integration with cloud object storage (Azure Blob / S3)
+- CI/CD pipeline for deployment automation
+- Automated reporting dashboard
+- Integration with monitoring tools (Prometheus, Grafana)
+- Infrastructure-as-Code version
+
+---
+
+## 👤 Author
+
+Dan Levi Menchaca  
+Data Infrastructure & Reliability Engineering Enthusiast  
