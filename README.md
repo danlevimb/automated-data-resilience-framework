@@ -1,102 +1,146 @@
 # Automated SQL Server Recovery Validation Framework
+### A recoverable backup is the only good backup.
 
-A SQL Server framework designed to automatically validate **backup recoverability** and **point-in-time restore scenarios** using deterministic restore chain construction and canary-based verification.
+A SQL Server framework designed to **prove database recoverability**, not just assume it.
 
-This project demonstrates a production-grade approach to ensuring that SQL Server backups are not only successful but **actually recoverable**.
+This project provides a deterministic and automated approach to validating **backup restore chains**, executing **point-in-time recovery (PITR)** scenarios, and generating **auditable recovery evidence** through restore telemetry and canary-based verification.
+
+Instead of trusting that backups *should work*, this framework continuously verifies that they **actually do**.
 
 ---
 
 # The Problem
 
-Many organizations rely on successful backup jobs as proof of recoverability.
+In many environments, successful backups are treated as proof of recoverability.
 
-However:
+Backup jobs run every night.  
+Logs are generated.  
+Alerts show **Success**.
 
-- A successful backup **does not guarantee** a successful restore.
-- Recovery chains may be broken.
-- Transaction log coverage may be incomplete.
-- STOPAT recovery may fail silently if not validated.
+Everything appears healthy.
 
-This framework focuses on solving that problem by **automatically executing restore validation tests**.
+Until the day a real restore is required.
 
----
+That is when the real problems begin.
 
-# Key Capabilities
+- **Broken restore chains** – Lack of traceability and validation of the transaction log restore sequence.
+- **Uncertainty in point-in-time recovery** – Recovery procedures exist but are rarely tested to guarantee that PITR actually works.
+- **No deterministic recovery validation** – Restore tests may complete successfully without proving that the database was restored to the intended logical state.
+- **Lack of recovery telemetry** – Restore operations are rarely measured, leaving no data to estimate realistic recovery objectives (RTO/RPO).
+- **Manual or inconsistent recovery testing** – Restore validation is performed ad-hoc instead of as a repeatable automated process.
 
-- Automatic restore chain construction (FULL / DIFF / LOG)
-- Point-in-time recovery validation
-- Mark-based restore validation
-- Deterministic restore verification using canary records
-- Detailed restore telemetry logging
-- Automated restore testing across multiple databases
+These problems often remain invisible until a real production incident occurs.
 
 ---
 
-# Framework Architecture
+# The Solution
 
-The framework is composed of four main stored procedures:
+This framework introduces an automated recovery validation system that:
 
-| Procedure | Responsibility |
-|-----------|---------------|
-| `cfg.usp_GetLatestBackupFiles` | Determines the correct restore chain |
-| `cfg.usp_RestorePointInTime` | Executes the restore workflow |
-| `cfg.usp_ValidatePitrCanary` | Validates recovery correctness |
-| `cfg.usp_RunRestoreTests` | Orchestrates restore validation tests |
+- deterministically constructs restore chains
+- executes controlled restore scenarios
+- verifies logical recovery using canary records
+- records execution telemetry
+- generates auditable recovery evidence
+
+By continuously validating restore capability, the framework transforms backup strategies from **assumed reliability** into **measurable recoverability**.
 
 ---
 
-# Restore Validation Workflow
+# Core Architecture
+
+The framework is built around four core components.
+
+| Component | Role |
+|--------|--------|
+| `cfg.usp_GetLatestBackupFiles` | **Restore Planner** – builds deterministic restore chains |
+| `cfg.usp_RestorePointInTime` | **Restore Engine** – executes FULL / DIFF / LOG restores |
+| `cfg.usp_ValidatePitrCanary` | **Validation Engine** – confirms logical correctness of recovery |
+| `cfg.usp_RunRestoreTests` | **Orchestrator** – executes automated restore validation tests |
+
+Together, these components provide a complete **restore validation pipeline**.
+
+---
+
+# Recovery Validation Workflow
+
+The framework executes the following deterministic validation process:
 
 1. Generate deterministic canary records
 2. Create a marked transaction boundary
 3. Produce required transaction log backups
-4. Execute restore workflow
-5. Apply STOPAT or STOPBEFOREMARK
-6. Validate restored state using canary verification
-7. Persist telemetry and execution evidence
+4. Construct the restore chain
+5. Execute FULL / DIFF / LOG restores
+6. Apply `STOPAT` or `STOPBEFOREMARK`
+7. Validate recovery using canary verification
+8. Persist restore telemetry and evidence
+
+This process converts restore validation from a **manual operation** into a **repeatable automated workflow**.
 
 ---
 
-# Repository Structure
-| Folder | Description |
-|-----------|---------------|
-| `docs/` | Architecture documentation |
-| `diagrams/` | Visual architecture diagrams |
-| `sql/` | Database objects |
-| `examples/` | Execution outputs and evidence |
+# Operational Capabilities
 
+Although originally designed for restore validation, the framework enables additional operational capabilities:
+
+### Recovery Validation
+Proves that backups can be successfully restored.
+
+### Recovery Automation
+Enables restore operations to be executed programmatically through deterministic restore workflows.
+
+### Recovery Observability
+Captures restore telemetry to support operational analysis such as:
+
+- restore duration trends
+- recovery success rates
+- recovery chain complexity
+- estimated recovery times
+
+This data can be used to refine and validate **Recovery Time Objectives (RTO)** and **Recovery Point Objectives (RPO)**.
 
 ---
 
 # Example Execution
 
 Example restore validation output:
-Processing database: AdventureWorks2022
-
-Creating PITR canaries
-Generating marked transaction
-
-Executing restore chain
-FULL restore completed
-DIFF restore completed
-LOG restore applied
-STOPAT applied successfully
-
-Validating canary records
-
-Validation result: PASSED
+- Processing database: AdventureWorks2022
+- Creating PITR canaries
+- Generating marked transaction
+- Executing restore chain
+- FULL restore completed
+- DIFF restore completed
+- LOG restore applied
+- STOPAT applied successfully
+- Validating canary records
+- Validation result: PASSED
 
 ---
 
-# Why This Project Matters
+# Repository Structure
 
-Backup success does not equal recoverability.
+| Folder | Description |
+|------|-------------|
+| `docs/` | Architecture and framework documentation |
+| `diagrams/` | Visual architecture diagrams |
+| `sql/` | Database objects (tables, procedures, demos) |
+| `examples/` | Execution outputs and validation evidence |
 
-This framework demonstrates how to implement **automated recovery validation**, which is a critical component of resilient data platform engineering.
+---
+
+# Why This Matters
+
+A successful backup does **not** guarantee recoverability.
+
+Organizations frequently discover restore failures only during production incidents.
+
+This framework demonstrates how to implement **continuous recovery validation** as part of a resilient data platform strategy.
+
+Instead of assuming recoverability, this system **proves it**.
 
 ---
 
 # Author
 
 Dan Levi Menchaca Bedolla  
-SQL Server DBA | Data Infrastructure & Reliability Engineering
+SQL Server Data Infrastructure & Reliability Engineer
