@@ -1,7 +1,14 @@
 ## `[cfg].[usp_BackupDatabase]`
+<p align="center">
+<a href="../README.md">Home</a> |
+<a href="architecture.md">Architecture</a> |
+<a href="telemetry.md">Telemetry</a> |
+<a href="restore-workflow.md">Restore Workflow</a>
+</p>
+
+---
 
 Executes a controlled backup operation for a specific database, applying standardized backup policies, storage routing, and telemetry capture. Stores a record in [`[dbo].[BackupRun]`](/sql/01/01_Tables/dbo.BackupRun.md)
-<p align="right"> <a href="/README.md">⬅ Back to Home</a> </p>
 
 ### **a) Inputs**
 | Parameter | Type | Description |
