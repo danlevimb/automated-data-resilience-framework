@@ -1,6 +1,7 @@
 ## `[cfg].[usp_BackupDatabase]`
 
 Executes a controlled backup operation for a specific database, applying standardized backup policies, storage routing, and telemetry capture. Stores a record in [`[dbo].[BackupRun]`](/sql/01/01_Tables/dbo.BackupRun.md)
+<p align="right"> <a href="/README.md">⬅ Back to Home</a> </p>
 
 ### **a) Inputs**
 | Parameter | Type | Description |
