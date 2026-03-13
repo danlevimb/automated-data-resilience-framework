@@ -10,7 +10,7 @@
 
 Stores detailed execution telemetry for every step involved in a restore validation run.
 
-While the `[log].[RestoreTestRun]` table records the header-level metadata of the restore operation, this table captures the step-by-step execution of the restore chain.
+While the [`[log].[RestoreTestRun]`](/sql/01_Tables/log.RestoreTestRun.md) table records the header-level metadata of the restore operation, this table captures the step-by-step execution of the restore chain.
 
 Each record represents a single restore action applied during the recovery workflow, including FULL backups, DIFFERENTIAL backups, and TRANSACTION LOG restores.
 
