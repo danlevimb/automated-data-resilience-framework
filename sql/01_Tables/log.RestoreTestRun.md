@@ -7,33 +7,50 @@
 </p>
 
 ---
-Defines the backup configuration and operational policies for each database managed by the framework.
 
-This table acts as the policy control layer of the backup system, allowing administrators to define which databases are included in automated backup operations and which backup types should be executed for each database.
+Stores execution telemetry for restore validation tests performed by the framework.
+
+Each record represents the header-level execution metadata of a restore validation run, capturing information about the restore operation, backup chain used, validation steps executed, and the final outcome of the recovery test.
 
 ### **a) Structure:**
 | Column | Type | Description |
-|-------|------|-------------|
-| DatabaseName | sysname | Name of the database to which the backup policy applies. |
-| IsIncluded | bit | Indicates whether the database is included in automated backup operations. |
-| TierID | tinyint | Backup tier classification used to determine backup frequency and retention policies. |
-| BackupFull | bit | Indicates whether FULL backups are enabled for the database. |
-| BackupDiff | bit | Indicates whether DIFFERENTIAL backups are enabled for the database. |
-| BackupLog | bit | Indicates whether TRANSACTION LOG backups are enabled for the database. |
-| OverridePrimaryPath | nvarchar | Optional custom override for the primary backup storage path. |
-| OverrideSecondaryPath | nvarchar | Optional custom override for the secondary backup storage path used for mirrored backups. |
-| OwnerTag | varchar | Logical ownership tag used to identify the responsible team or application owner. |
-| Notes | varchar | Free-text field used to document special considerations or operational notes for the database. |
-| LastRefreshedAt | datetime2 | Timestamp indicating when the policy entry was last refreshed or updated. |
+|------|------|-------------|
+| RestoreRunID | bigint | Unique identifier of the restore test execution. |
+| CorrelationID | uniqueidentifier | Identifier used to correlate the restore test with related framework operations. |
+| StartedAt | datetime2 | Timestamp indicating when the restore test started. |
+| EndedAt | datetime2 | Timestamp indicating when the restore test completed. |
+| SourceDatabase | sysname | Name of the source database used to generate the restore chain. |
+| TargetDatabase | sysname | Name of the temporary database created during restore validation. |
+| StopAt | datetime2 | Target point-in-time used during the restore operation when STOPAT recovery is applied. |
+| FullBackupFile | nvarchar | Path of the FULL backup file used as the base of the restore chain. |
+| DiffBackupFile | nvarchar | Path of the DIFFERENTIAL backup file applied during restore, if applicable. |
+| LogBackupFilesCount | int | Number of transaction log backup files applied during the restore sequence. |
+| DataFileTarget | nvarchar | Target path where restored data files were placed during the restore operation. |
+| LogFileTarget | nvarchar | Target path where restored transaction log files were placed during the restore operation. |
+| CheckDbRequested | bit | Indicates whether a DBCC CHECKDB operation was requested after the restore completed. |
+| CheckDbSucceeded | bit | Indicates whether the DBCC CHECKDB validation succeeded. |
+| Succeeded | bit | Indicates whether the restore validation operation completed successfully. |
+| ErrorNumber | int | SQL Server error number recorded if the restore operation failed. |
+| ErrorMessage | nvarchar | Detailed error message captured during restore failure. |
+| LogsBaseDate | datetime2 | Timestamp representing the base reference point used to generate transaction log backups for the restore test. |
+| DebugEnabled | bit | Indicates whether the restore test was executed in debug mode. |
+| CanaryBeforeName | nvarchar | Identifier of the BEFORE canary record inserted prior to the marked transaction boundary. |
+| CanaryMarkName | nvarchar | Identifier of the MARK canary record inserted within the marked transaction boundary. |
+| CanaryAfterName | nvarchar | Identifier of the AFTER canary record inserted after the marked transaction boundary. |
+| CanaryValidated | bit | Indicates whether the canary validation procedure was executed. |
+| CanaryPassed | bit | Indicates whether the canary validation checks passed successfully. |
+| CanaryMessage | nvarchar | Validation message produced by the canary verification process. |
+| MarkLogFile | nvarchar | Transaction log backup file containing the marked transaction boundary used for STOPBEFOREMARK recovery. |
+
 
 ### **b) Expected table content:**
-| DatabaseName | IsIncluded | TierID | BackupFull | BackupDiff | BackupLog | OverridePrimaryPath | OverrideSecondaryPath | OwnerTag | Notes | LastRefreshedAt |
-|--------------|------------|--------|------------|------------|-----------|---------------------|-----------------------|----------|------|----------------|
-| master | 1 | 1 | 1 | 0 | 1 | NULL | NULL | System | System database backup policy | 2026-03-01 10:00:00 |
-| model | 1 | 1 | 1 | 0 | 1 | NULL | NULL | System | Default template database | 2026-03-01 10:00:00 |
-| msdb | 1 | 1 | 1 | 0 | 1 | NULL | NULL | System | SQL Agent and job metadata | 2026-03-01 10:00:00 |
-| AdventureWorks2022 | 1 | 2 | 1 | 1 | 1 | NULL | NULL | Demo | Demo database for framework validation | 2026-03-06 12:40:00 |
-| LabCriticalDB | 1 | 3 | 1 | 1 | 1 | NULL | NULL | Lab | Critical recovery validation testing database | 2026-03-09 08:00:00 |
+| RestoreRunID | SourceDatabase | TargetDatabase | StopAt | LogBackupFilesCount | CheckDbRequested | CheckDbSucceeded | CanaryValidated | CanaryPassed | Succeeded |
+|--------------|---------------|---------------|--------|--------------------|------------------|------------------|----------------|--------------|-----------|
+| 101 | AdventureWorks2022 | AdventureWorks2022_RestoreTest | 2026-03-06 12:45:30 | 8 | 1 | 1 | 1 | 1 | 1 |
+| 102 | AdventureWorks2022 | AdventureWorks2022_RestoreTest | 2026-03-07 09:15:10 | 6 | 1 | 1 | 1 | 1 | 1 |
+| 103 | LabCriticalDB | LabCriticalDB_RestoreTest | 2026-03-09 08:00:00 | 10 | 1 | 1 | 1 | 1 | 1 |
+| 104 | DemoDB | DemoDB_RestoreTest | 2026-03-09 10:30:00 | 4 | 0 | NULL | 1 | 1 | 1 |
+| 105 | DemoDB | DemoDB_RestoreTest | 2026-03-09 11:10:00 | 5 | 1 | 0 | 1 | 0 | 0 |
 
 ---
 
