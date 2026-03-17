@@ -43,7 +43,7 @@ A Master-Detail structure where each record represents the header-level executio
 | MarkLogFile | nvarchar | Transaction log backup file containing the marked transaction boundary used for STOPBEFOREMARK recovery. |
 
 
-### **b) Expected table content:**
+### **b) Relevant table content:**
 | RestoreRunID | SourceDatabase | TargetDatabase | StopAt | LogBackupFilesCount | CheckDbRequested | CheckDbSucceeded | CanaryValidated | CanaryPassed | Succeeded |
 |--------------|---------------|---------------|--------|--------------------|------------------|------------------|----------------|--------------|-----------|
 | 101 | AdventureWorks2022 | AdventureWorks2022_RestoreTest | 2026-03-06 12:45:30 | 8 | 1 | 1 | 1 | 1 | 1 |
