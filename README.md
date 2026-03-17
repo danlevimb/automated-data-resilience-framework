@@ -1,11 +1,20 @@
 # Automated SQL Server Recovery Validation Framework
 ### A recoverable backup is the only good backup.
 
-A SQL Server framework designed to **prove database recoverability**, not just assume it.
+<p align="center">
+<a href="README.md">Home</a> |
+<a href="docs/architecture.md">Architecture</a> |
+<a href="telemetry.md">Telemetry</a> |
+<a href="restore-workflow.md">Restore Workflow</a>
+</p>
 
-This project provides a deterministic and automated approach to validating **backup restore chains**, executing **point-in-time recovery (PITR)** scenarios, and generating **auditable recovery evidence** through restore telemetry and canary-based verification.
+---
 
-Instead of trusting that backups *should work*, this framework continuously verifies that they **actually do**.
+This project presents a practical, production-oriented approach to implementing automated recovery validation in SQL Server environments. Its main objective is to ensure that backups are not only successfully created, but **proven to be recoverable**.
+
+The framework provides a deterministic and automated mechanism to construct valid restore chains (FULL / DIFF / LOG), execute **point-in-time recovery (PITR)** scenarios, and validate restored data using **canary-based verification**, while generating **auditable recovery telemetry** for every execution.
+
+By combining restore orchestration, validation techniques, and execution logging, this solution transforms traditional backup strategies into **measurable and verifiable recovery processes**, allowing organizations to move from assuming recoverability to actually proving it.
 
 ---
 
@@ -144,3 +153,12 @@ Instead of assuming recoverability, this system **proves it**.
 
 Dan Levi Menchaca Bedolla  
 SQL Server Data Infrastructure & Reliability Engineer
+
+---
+
+<p align="center">
+<a href="README.md">Home</a> |
+<a href="docs/architecture.md">Architecture</a> |
+<a href="telemetry.md">Telemetry</a> |
+<a href="restore-workflow.md">Restore Workflow</a>
+</p>
