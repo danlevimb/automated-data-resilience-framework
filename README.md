@@ -16,101 +16,93 @@ The framework provides a deterministic and automated mechanism to construct vali
 
 By combining restore orchestration, validation techniques, and execution logging, this solution transforms traditional backup strategies into **measurable and verifiable recovery processes**, allowing organizations to move from assuming recoverability to actually proving it.
 
----
+## The Problem
 
-# The Problem
+Backup success does not guarantee recoverability.
 
-In many environments, successful backups are treated as proof of recoverability.
+In many systems, restore chains are unverified, point-in-time recovery is untested, and no evidence exists to prove that a database can actually be restored.
 
-Backup jobs run every night.  
-Logs are generated.  
-Alerts show **Success**.
+When failure occurs, uncertainty becomes risk.
 
-Everything appears healthy.
+Recoverability is assumed, not validated.
 
-Until the day a real restore is required.
+## The Solution
 
-That is when the real problems begin.
+This framework eliminates uncertainty from recovery processes by introducing automation, validation, and observability into SQL Server restore operations.
 
-- **Broken restore chains** – Lack of traceability and validation of the transaction log restore sequence.
-- **Uncertainty in point-in-time recovery** – Recovery procedures exist but are rarely tested to guarantee that PITR actually works.
-- **No deterministic recovery validation** – Restore tests may complete successfully without proving that the database was restored to the intended logical state.
-- **Lack of recovery telemetry** – Restore operations are rarely measured, leaving no data to estimate realistic recovery objectives (RTO/RPO).
-- **Manual or inconsistent recovery testing** – Restore validation is performed ad-hoc instead of as a repeatable automated process.
+It deterministically constructs restore chains, executes point-in-time recovery scenarios with STOPAT / STOPBEFOREMARK, and validates outcomes using canary-based verification.
 
-These problems often remain invisible until a real production incident occurs.
+Each execution produces auditable telemetry, allowing recovery capabilities to be measured, tested, and trusted.
 
----
+What was once assumed can now be verified.
 
-# The Solution
+What was uncertain is now controlled.
 
-This framework introduces an automated recovery validation system that:
+## Key Capabilites
+- **Deterministic Restore Chain Construction**  
+  Automatically builds valid restore sequences (FULL / DIFF / LOG) based on backup metadata, ensuring correct LSN continuity and recovery order.
+- **Point-in-Time Recovery (PITR) Execution**  
+  Supports precise STOPAT and STOPBEFOREMARK recovery scenarios, enabling restoration to exact moments or transactional boundaries.
 
-- deterministically constructs restore chains
-- executes controlled restore scenarios
-- verifies logical recovery using canary records
-- records execution telemetry
-- generates auditable recovery evidence
+- **Canary-Based Recovery Validation**  
+  Uses BEFORE / MARK / AFTER logical markers to verify that restored data matches the expected state with deterministic accuracy.
 
-By continuously validating restore capability, the framework transforms backup strategies from **assumed reliability** into **measurable recoverability**.
+- **Automated Restore Testing at Scale**  
+  Executes recovery validation across multiple databases through a centralized orchestration process.
 
----
+- **Auditable Restore Telemetry**  
+  Captures detailed execution data for every restore operation, including timing, chain composition, and validation outcomes.
 
-# Core Architecture
+- **Recovery Observability Model**  
+  Provides structured telemetry that enables analysis of restore behavior, validation results, and recovery performance over time.
 
-The framework is built around four core components.
+- **RTO/RPO Insight Generation**  
+  Enables estimation of realistic recovery objectives based on actual execution metrics instead of assumptions.
 
-| Component | Role |
-|--------|--------|
-| `cfg.usp_GetLatestBackupFiles` | **Restore Planner** – builds deterministic restore chains |
-| `cfg.usp_RestorePointInTime` | **Restore Engine** – executes FULL / DIFF / LOG restores |
-| `cfg.usp_ValidatePitrCanary` | **Validation Engine** – confirms logical correctness of recovery |
-| `cfg.usp_RunRestoreTests` | **Orchestrator** – executes automated restore validation tests |
+- **Failure Diagnostics and Traceability**  
+  Records step-by-step restore execution, allowing precise identification of failures within the restore chain.
 
-Together, these components provide a complete **restore validation pipeline**.
+- **Modular and Extensible Design**  
+  Built with reusable stored procedures that can be integrated into existing backup strategies or expanded into broader data platform workflows.
 
----
+***These capabilities transform backup validation into a reliable, measurable, and engineering-driven recovery process.***
 
-# Recovery Validation Workflow
 
-The framework executes the following deterministic validation process:
+## How It Works
 
-1. Generate deterministic canary records
-2. Create a marked transaction boundary
-3. Produce required transaction log backups
-4. Construct the restore chain
-5. Execute FULL / DIFF / LOG restores
-6. Apply `STOPAT` or `STOPBEFOREMARK`
-7. Validate recovery using canary verification
-8. Persist restore telemetry and evidence
+The framework validates recoverability through a deterministic workflow:
 
-This process converts restore validation from a **manual operation** into a **repeatable automated workflow**.
+- Generates canary records to define validation checkpoints  
+- Creates marked transactions for precise recovery boundaries  
+- Builds restore chains using backup metadata and LSN continuity  
+- Executes restores using STOPAT or STOPBEFOREMARK  
+- Validates restored data against expected canary states  
+- Captures detailed telemetry for audit and analysis  
 
----
+Recoverability is validated through execution, not assumption.
 
-# Operational Capabilities
+## Architecture Overview 
 
-Although originally designed for restore validation, the framework enables additional operational capabilities:
+The framework is built as a modular and extensible architecture that integrates backup generation, restore orchestration, validation logic, and telemetry collection within a cohesive ecosystem.
 
-### Recovery Validation
-Proves that backups can be successfully restored.
+It operates on top of SQL Server components such as Agent Jobs, backup storage, and system metadata, combining them with purpose-built stored procedures to automate and validate recovery scenarios end-to-end.
 
-### Recovery Automation
-Enables restore operations to be executed programmatically through deterministic restore workflows.
+For a detailed breakdown of the architecture, components, and interactions, refer to the [full documentation](docs/architecture.md).
 
-### Recovery Observability
-Captures restore telemetry to support operational analysis such as:
+## Observability & Telemetry
 
-- restore duration trends
-- recovery success rates
-- recovery chain complexity
-- estimated recovery times
+This framework introduces a structured observability layer for recovery operations, transforming restore validation into a measurable and auditable process. Every execution generates telemetry that captures both high-level outcomes and detailed restore behavior.
 
-This data can be used to refine and validate **Recovery Time Objectives (RTO)** and **Recovery Point Objectives (RPO)**.
+It records key information across multiple levels:
 
----
+- Backup execution telemetry (duration, size, verification, storage paths)  
+- Restore validation runs (source/target, recovery type, execution status)  
+- Step-by-step restore chain execution (FULL / DIFF / LOG, LSN continuity, timing)  
+- Canary-based validation results (BEFORE / MARK / AFTER verification)  
 
-# Example Execution
+This approach enables full traceability of recovery operations and provides the data required to validate restore integrity, analyze performance, and refine RTO/RPO objectives. Recoverability is no longer assumed — it is observable, measurable, and engineered.
+
+## Example Execution
 
 Example restore validation output:
 - Processing database: AdventureWorks2022
@@ -130,10 +122,10 @@ Example restore validation output:
 
 | Folder | Description |
 |------|-------------|
-| `docs/` | Architecture and framework documentation |
-| `diagrams/` | Visual architecture diagrams |
-| `sql/` | Database objects (tables, procedures, demos) |
-| `examples/` | Execution outputs and validation evidence |
+| [`docs/`](docs/) | Architecture and framework documentation |
+| [`diagrams/`](diagrams/) | Visual architecture diagrams |
+| [`sql/`](sql/) | Database objects (tables, procedures, demos) |
+| [`examples/`](examples/) | Execution outputs and validation evidence |
 
 ---
 
