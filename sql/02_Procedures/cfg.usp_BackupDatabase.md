@@ -24,3 +24,13 @@ Executes a controlled backup operation for a specific database, applying standar
 | @WithCompression | bit | Enables backup compression to reduce storage consumption and potentially improve backup throughput. |
 | @StatsPercent | tinyint | Controls the `STATS` output interval during backup execution, indicating progress percentage reported by SQL Server. |
 | @CorrelationID | uniqueidentifier | Unique identifier used to correlate this backup execution with other operations in the framework, enabling cross-process telemetry and traceability. |
+
+
+### **b) Outputs**
+---
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="architecture.md">Architecture</a> |
+<a href="telemetry.md">Telemetry</a> |
+<a href="restore-workflow.md">Restore Workflow</a>
+</p>
