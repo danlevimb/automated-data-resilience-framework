@@ -50,7 +50,6 @@ EXEC cfg.usp_BackupDatabase
     @BackupType = 'FULL',
     @WithCompression = 1,
     @WithChecksum = 1;
-
 ```
 ## Outputs
 
