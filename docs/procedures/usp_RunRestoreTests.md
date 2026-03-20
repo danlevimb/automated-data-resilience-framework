@@ -61,8 +61,8 @@ EXEC cfg.usp_RunRestoreTests
 Each execution generates outputs at three levels.
 
 ### *1. Persisted telemetry*
-- **Header-level** in [log].[RestoreTestRun]
-- **Step-level** in [log].[RestoreStepExecution]
+- **Header-level** in `[log].[RestoreTestRun]`
+- **Step-level** in `[log].[RestoreStepExecution]`
 
 These tables store execution metadata, restore telemetry, canary validation status, and step-by-step restore history.
 
