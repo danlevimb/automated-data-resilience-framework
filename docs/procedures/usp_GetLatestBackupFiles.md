@@ -64,7 +64,7 @@ EXEC cfg.usp_GetLatestBackupFiles
 
 This output is later consumed by `[cfg].[usp_RestorePointInTime]`.
 
-Related Components
+## Related Components
 
 - `[cfg].[usp_RestorePointInTime]` → Executes restore operations
 - `[cfg].[usp_ValidatePitrCanary]` → Validates restore correctness
