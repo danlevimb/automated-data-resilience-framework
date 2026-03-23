@@ -27,7 +27,6 @@ This procedure ensures consistent and centralized path resolution across the fra
 ## Execution Flow
 
 The procedure follows a simple resolution logic:
-
 1. Determine the full path according to requested type and active path.
 2. Return the resolved base path  
 
@@ -42,10 +41,9 @@ EXEC cfg.usp_GetActiveBasePath
 ```
 ## Outputs
 
-The procedure returns a single value representing the resolved base path:
+The procedure returns a single value representing the resolved base path.
 
 ## Related Components
-
 - `[cfg].[usp_BackupDatabase]` → Backup execution engine
 - `[cfg].[usp_GetRestoreTestBasePath]` → Restore tests directory 
 
