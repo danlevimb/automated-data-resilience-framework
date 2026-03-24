@@ -1,58 +1,68 @@
 # cfg.usp_GetActiveBasePath
 
 > *Storage Layer - Resolution*
-
+> 
 ## Overview
 
-`cfg.usp_GetActiveBasePath` is responsible for resolving the effective storage path used during backup and restore operations.
+`cfg.usp_GetActiveBasePath` resolves the effective base path used by the framework for backup and restore operations.
 
-It abstracts path selection logic by determining whether the `PRIMARY` / `SECONDARY` / `TEST` storage locations should be used based on execution context and configuration parameters.
+In addition to resolving the active storage path based on configuration, the procedure performs early validation to ensure that the selected path exists and is usable as a directory.
 
-This procedure ensures consistent and centralized path resolution across the framework.
+This approach centralizes path resolution and validation logic, allowing downstream components to operate with a consistent and reliable storage reference.
 
 ## Responsibilities
 
-- Resolve the effective storage path (PRIMARY / SECONDARY / TESTS)  
-- Provide deterministic path selection logic  
-- Abstract storage decisions from execution procedures  
-- Ensure consistency across backup and restore components  
+- Resolve the active base path for a given path type  
+- Normalize the returned storage path  
+- Validate that the resolved path exists and is a directory  
+- Fail early when storage configuration is invalid  
+- Provide a deterministic storage reference to backup and restore components  
 
 ## Parameters
 
 | Parameter | Type | Description |
 |----------|------|-------------|
-| @PathType | VARCHAR(30) | Indicates the desired path type (`PRIMARY` / `SECONDARY` / `TESTS`). |
-| @BasePath | NVARCHAR(260) OUTPUT | Returns the resolved full path |
+| @PathType | VARCHAR(30) | Logical path type to resolve (for example `PRIMARY`, `SECONDARY`, or `RESTORE_TEST`). |
+| @BasePath | NVARCHAR(260) OUTPUT | Resolved and validated base path returned by the procedure. |
 
 ## Execution Flow
 
-The procedure follows a simple resolution logic:
-1. Determine the full path according to requested type and active path.
-2. Return the resolved base path  
+The procedure follows a simple but deterministic resolution pattern:
+
+1. Normalize the input `@PathType`  
+2. Retrieve the active base path from `cfg.BackupPaths`  
+3. Validate that a configuration entry exists  
+4. Validate that the path is not empty  
+5. Normalize the path to ensure trailing separator consistency  
+6. Validate that the resolved path exists and is a valid directory  
+7. Return the resolved base path  
 
 ## Example Usage
 
 ```sql
-DECLARE @OutputPath NVARCHAR(260);
+DECLARE @BasePath NVARCHAR(260);
 
 EXEC cfg.usp_GetActiveBasePath
-    @PathType = 'PRIMARY',
-    @BasePath = @OutputPath OUTPUT;
+    @PathType = 'RESTORE_TEST',
+    @BasePath = @BasePath OUTPUT;
+
+SELECT @BasePath AS ResolvedBasePath;
 ```
 ## Outputs
 
-The procedure returns a single value representing the resolved base path.
+The procedure returns a single resolved value through the output parameter.
 
 ## Related Components
+- `[cfg].[BackupPaths]` → Stores active path configuration
 - `[cfg].[usp_BackupDatabase]` → Backup execution engine
-- `[cfg].[usp_GetRestoreTestBasePath]` → Restore tests directory 
+- `[cfg].[usp_GetRestoreTestBasePath]` → Restore test path resolution
+- `[cfg].[usp_GetLatestBackupFiles]` → Restore planning engine
 
 ## Design Notes
 
-This procedure represents the storage resolution layer of the framework.
+This procedure combines path resolution and early path validation in order to keep the framework cohesive and easier to navigate.
 
-By isolating path selection logic into a dedicated component, the framework achieves better modularity, maintainability, and consistency across backup and restore operations.
+In larger enterprise implementations, validation logic could be separated into a dedicated infrastructure validation component. In this project, it is intentionally integrated here to reduce complexity and improve readability without sacrificing reliability.
 
 ## Source Code
-
 [View full implementation](../../sql/cfg/usp_GetActiveBasePath.sql)
