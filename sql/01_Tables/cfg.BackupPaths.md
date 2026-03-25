@@ -1,3 +1,11 @@
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
+
+---
+
 # cfg.BackupPaths
 
 ## Overview
@@ -29,3 +37,11 @@ It acts as the **abstraction layer for physical storage**, improving portability
 | 1 | PRIMARY | C:\BD\Backup\PRIMARY\ | 1 |
 | 2 | SECONDARY | C:\BD\Backup\SECONDARY\ | 1 |
 | 3 | RESTORE_TEST | C:\BD\Backup\RESTORE_TEST\ | 1 |
+
+---
+
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
