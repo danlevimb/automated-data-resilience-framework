@@ -1,7 +1,7 @@
 <p align="center">
 <a href="/README.md">Home</a> |
 <a href="../../sql/01_Tables.md">Tables</a> |
-<a href="/docs/telemetry.md">Procedures</a>
+<a href="../../sql/02_Procedures.md">Procedures</a>
 </p>
 
 # cfg.usp_GetActiveBasePath
