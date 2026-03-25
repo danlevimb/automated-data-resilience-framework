@@ -61,7 +61,7 @@ SELECT @BasePath AS ResolvedBasePath;
 The procedure returns a single resolved value through the output parameter.
 
 ## Related Components
-- `[cfg].[BackupPaths]` → Stores active path configuration
+- [`[cfg].[BackupPaths]`](../../sql/01_Tables/cfg.BackupPaths.md) → Stores active path configuration
 - `[cfg].[usp_BackupDatabase]` → Backup execution engine
 - `[cfg].[usp_GetRestoreTestBasePath]` → Restore test path resolution
 - `[cfg].[usp_GetLatestBackupFiles]` → Restore planning engine
