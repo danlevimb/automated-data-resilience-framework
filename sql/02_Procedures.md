@@ -20,8 +20,8 @@ Configuration procedures provide access to framework settings, resolve dynamic v
 ## Backup
 Backup procedures orchestrate and execute database backup operations based on policy and tier configuration.
 
-- [`[cfg].[usp_BackupDatabase]`](../docs/procedures/02_Procedures/usp_BackupDatabase.md)
-- [`[cfg].[usp_BackupByTierAndType]`](../docs/procedures/02_Procedures/usp_BackupByTierAndType.md)
+- [`[cfg].[usp_BackupDatabase]`](../docs/procedures/usp_BackupDatabase.md)
+- [`[cfg].[usp_BackupByTierAndType]`](../docs/procedures/usp_BackupByTierAndType.md)
 
 ## Restore
 Restore procedures handle restore chain construction and execution for point-in-time recovery scenarios.
