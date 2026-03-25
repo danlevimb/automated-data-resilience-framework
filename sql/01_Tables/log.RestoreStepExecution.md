@@ -1,3 +1,11 @@
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
+
+---
+
 # log.RestoreStepExecution
 
 ## Overview
@@ -54,3 +62,11 @@ It acts as the **granular evidence layer** for restore chain reconstruction and 
 | 1004 | 202 | 1 | FULL | C:\BD\Backup\PRIMARY\LabCriticalDB_FULL_20260324_120000.bak | 0 | 0 | 1 | NULL |
 | 1005 | 202 | 2 | LOG | C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_MARK_20260324_121500_01.trn | 0 | 1 | 1 | NULL |
 | 1006 | 204 | 3 | LOG | C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_20260324_143000.trn | 1 | 0 | 0 | 4330 |
+
+--- 
+
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
