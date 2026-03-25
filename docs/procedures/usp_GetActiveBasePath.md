@@ -1,3 +1,9 @@
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="/docs/architecture.md">Tables</a> |
+<a href="/docs/telemetry.md">Procedures</a>
+</p>
+
 # cfg.usp_GetActiveBasePath
 
 > *Storage Layer - Resolution*
