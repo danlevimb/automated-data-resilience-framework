@@ -51,7 +51,7 @@ The procedure returns a single resolved value through the output parameter.
 
 ## Design Notes
 
-This procedure intentionally wraps `[cfg].[usp_GetActiveBasePath]` to make restore test path resolution more explicit and easier to consume.
+This procedure intentionally wraps [`[cfg].[usp_GetActiveBasePath]`](../../docs/procedures/usp_GetActiveBasePath.md) to make restore test path resolution more explicit and easier to consume.
 
 Although the logic is minimal, the procedure improves readability by expressing intent directly in the calling code.
 
