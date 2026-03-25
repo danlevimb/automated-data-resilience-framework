@@ -1,3 +1,11 @@
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
+
+---
+
 # cfg.usp_BackupByTierAndType
 
 > ***Backup Layer***
@@ -66,3 +74,11 @@ Each database processed generates an independent telemetry record in dbo.BackupR
 
 ## Source Code
 [View full implementation](../../sql/cfg/usp_BackupByTierAndType.sql)
+
+---
+
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
