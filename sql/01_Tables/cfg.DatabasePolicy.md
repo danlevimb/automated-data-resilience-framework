@@ -4,7 +4,7 @@
 The `[cfg].[DatabasePolicy]` table defines the backup and recovery configuration at the database level. It controls which databases are included in the framework and specifies the backup strategy and storage behavior applied to each one.
 
 ## Purpose
-This table enables a **policy-driven approach** for backup orchestration, allowing the framework to dynamically determine:
+It acts as the **central configuration layer**, enabling scalable and flexible backup orchestration without hardcoded logic to determine:
 
 - Which databases participate in automated processes  
 - What types of backups are executed (FULL, DIFF, LOG)  
