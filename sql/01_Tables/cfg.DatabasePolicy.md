@@ -1,3 +1,11 @@
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
+
+---
+
 # cfg.DatabasePolicy
 
 ## Overview
@@ -37,3 +45,11 @@ It acts as the **central configuration layer**, eliminating hardcoded logic and 
 | ReportingDB | 1 | 2 | 1 | 1 | 0 |
 | AdventureWorks | 1 | 3 | 1 | 0 | 1 |
 | DevSandbox | 0 | 3 | 1 | 1 | 0 |
+
+--- 
+
+<p align="center">
+<a href="/README.md">Home</a> |
+<a href="../../sql/01_Tables.md">Tables</a> |
+<a href="../../sql/02_Procedures.md">Procedures</a>
+</p>
