@@ -68,9 +68,9 @@ Each database processed generates an independent telemetry record in dbo.BackupR
 
 ## Related Components
 
-- `[cfg].[DatabasePolicy]` → Defines backup inclusion and tiering rules
-- `[cfg].[usp_BackupDatabase]` → Executes individual database backups
-- `[dbo].[BackupRun]` → Stores execution telemetry
+- [`[cfg].[DatabasePolicy]`](../../sql/01_Tables/cfg.DatabasePolicy.md) → Defines backup inclusion and tiering rules
+- [`[cfg].[usp_BackupDatabase]`](../../docs/procedures/usp_BackupDatabase.md) → Executes individual database backups
+- [`[log].[BackupRun]`](../../sql/01_Tables/log.BackupRun.md) → Stores execution telemetry
 
 ## Source Code
 [View full implementation](../../sql/cfg/usp_BackupByTierAndType.sql)
