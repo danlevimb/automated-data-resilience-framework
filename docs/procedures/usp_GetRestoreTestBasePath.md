@@ -6,14 +6,14 @@
 
 `cfg.usp_GetRestoreTestBasePath` resolves the active base path used for restore test operations.
 
-It acts as a thin wrapper around `cfg.usp_GetActiveBasePath`, providing a simplified and intention-revealing interface for components that need to work specifically with the `RESTORE_TEST` path type.
+It acts as a thin wrapper around [`[cfg].[usp_GetActiveBasePath]`](../../docs/procedures/usp_GetActiveBasePath.md), providing a simplified and intention-revealing interface for components that need to work specifically with the `RESTORE_TEST` path type.
 
 This keeps restore test workflows easier to read while preserving centralized path resolution and validation logic.
 
 ## Responsibilities
 
 - Resolve the active restore test base path  
-- Delegate storage resolution and validation to `cfg.usp_GetActiveBasePath`  
+- Delegate storage resolution and validation to [`cfg.usp_GetActiveBasePath`](../../docs/procedures/usp_GetActiveBasePath.md)
 - Provide a simplified interface for restore test workflows  
 - Improve readability of restore-related procedures  
 
@@ -27,7 +27,7 @@ This keeps restore test workflows easier to read while preserving centralized pa
 
 The procedure follows a minimal execution pattern:
 
-1. Invoke `cfg.usp_GetActiveBasePath`  
+1. Invoke [`[cfg].[usp_GetActiveBasePath]`](../../docs/procedures/usp_GetActiveBasePath.md)
 2. Request the `RESTORE_TEST` path type  
 3. Return the resolved and validated base path through the output parameter  
 
