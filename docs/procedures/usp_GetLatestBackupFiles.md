@@ -20,7 +20,7 @@ This procedure **does not** execute restores — it defines *what must be restor
 
 ## Responsibilities
 
-- Identify the correct FULL backup baseline  
+- Identify the correct `FULL` backup baseline  
 - Select the latest applicable `DIFF` backup (if available)  
 - Resolve the required sequence of LOG backups  
 - Ensure LSN continuity across the restore chain  
