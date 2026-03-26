@@ -14,17 +14,17 @@
 
 `cfg.usp_GetLatestBackupFiles` is responsible for constructing a deterministic restore chain required to perform point-in-time recovery (PITR).
 
-It analyzes backup metadata and identifies the correct sequence of FULL, DIFF, and LOG backups needed to restore a database to a specific point in time or transaction mark.
+It analyzes backup metadata and identifies the correct sequence of `FULL`, `DIFF`, and `LOG` backups needed to restore a database to a specific point in time or transaction mark.
 
 This procedure **does not** execute restores — it defines *what must be restored and in which order*, serving as the foundation for reliable recovery execution.
 
 ## Responsibilities
 
 - Identify the correct FULL backup baseline  
-- Select the latest applicable DIFF backup (if available)  
+- Select the latest applicable `DIFF` backup (if available)  
 - Resolve the required sequence of LOG backups  
 - Ensure LSN continuity across the restore chain  
-- Support STOPAT and STOPBEFOREMARK recovery scenarios  
+- Support `STOPAT` and `STOPBEFOREMARK` recovery scenarios  
 - Provide deterministic restore planning output  
 
 ## Parameters
@@ -44,7 +44,7 @@ This procedure **does not** execute restores — it defines *what must be restor
 The procedure follows a deterministic planning process:
 
 1. Retrieve backup history metadata (msdb and/or internal tables)  
-2. Identify the most recent valid FULL backup prior to target recovery point  
+2. Identify the most recent valid `FULL` backup prior to target recovery point  
 3. Determine whether a DIFF backup applies  
 4. Build the LOG chain based on LSN continuity
 5. Validate restore sequence integrity  
@@ -64,7 +64,7 @@ EXEC cfg.usp_GetLatestBackupFiles
 ## Outputs
 
  The procedure returns a structured dataset representing the restore chain, including:
-- Backup type (FULL / DIFF / LOG)
+- Backup type (`FULL` / `DIFF` / `LOG`)
 - Backup file paths
 - LSN boundaries (FirstLSN, LastLSN, CheckpointLSN)
 - Backup timestamps
