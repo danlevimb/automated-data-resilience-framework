@@ -7,8 +7,6 @@
 
 The framework executes a complete recovery validation cycle by orchestrating backup artifacts, restore logic, and data-level verification into a deterministic workflow.
 
-The following steps describe the end-to-end execution model:
-
 ---
 
 ### 1. Backup Generation
