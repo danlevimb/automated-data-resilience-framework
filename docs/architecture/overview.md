@@ -2,6 +2,7 @@
 <a href="README.md">Home</a> |
 <a href="../architecture.md">Back</a>
 </p>
+
 # Overview
 
 The Automated Backup & Recovery Framework is designed to provide **deterministic validation of SQL Server backup recoverability** by integrating with an existing backup ecosystem and executing controlled restore tests.
