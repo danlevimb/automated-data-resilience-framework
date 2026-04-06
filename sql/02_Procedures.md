@@ -14,6 +14,7 @@ This section contains the stored procedures that implement the core logic of the
 ## Configuration
 Configuration procedures provide access to framework settings, resolve dynamic values such as paths, environment-specific parameters.
 
+- [`[cfg].[usp_RunScheduledBackups]`](../docs/procedures/usp_RunScheduledBackups.md)
 - [`[cfg].[usp_GetActiveBasePath]`](../docs/procedures/usp_GetActiveBasePath.md)
 - [`[cfg].[usp_GetRestoreTestBasePath]`](../docs/procedures/usp_GetRestoreTestBasePath.md)
 
