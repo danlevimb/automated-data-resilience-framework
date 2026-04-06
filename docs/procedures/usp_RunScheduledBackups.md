@@ -103,24 +103,29 @@ Returns a decision matrix including:
 ### Execution Mode
 
 Executes backups per database and generates telemetry records in:
-- [log].[BackupRun]
+- [log].[BackupRun](../../sql/01_Tables/log.BackupRun.md)
 
 All executions are correlated via a shared CorrelationID.
 
 ## Related Components
 [`[cfg].[DatabasePolicy]`](../../sql/01_Tables/cfg.DatabasePolicy.md)
  → Defines inclusion and backup rules
-[cfg].[Tier]
+[`[cfg].[Tier]`](../../sql/01_Tables/cfg.Tier.md)
  → Defines frequency and RPO/RTO targets
-[cfg].[usp_BackupDatabase]
+[`[cfg].[usp_BackupDatabase]`](../../docs/procedures/usp_BackupDatabase.md)
  → Executes individual database backups
-[log].[BackupRun]
+[`[log].[BackupRun]`](../../sql/01_Tables/log.BackupRun.md)
  → Stores execution telemetry
 
 ## Source Code
+[View full implementation](../../sql/cfg/usp_RunScheduledBackups.sql)
 
-View full implementation
+---
 
-<p align="center"> <a href="/README.md">Home</a> | <a href="../../sql/01_Tables.md">Tables</a> | <a href="../../sql/02_Procedures.md">Procedures</a> </p> ```
+<p align="center"> 
+<a href="/README.md">Home</a> | 
+<a href="../../sql/01_Tables.md">Tables</a> | 
+<a href="../../sql/02_Procedures.md">Procedures</a> 
+</p>
 
 
