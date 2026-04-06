@@ -4,6 +4,8 @@ The framework uses a **lightweight, trigger-based scheduling model** powered by 
 
 A single job executes [`[cfg].[usp_RunScheduledBackups]`](../docs/procedures/usp_RunScheduledBackups.md) at a fixed interval (typically every 5 minutes).
 
+---
+
 ### Key Principle
 
 The SQL Server Agent job does **not contain any scheduling logic**.
@@ -12,17 +14,6 @@ Instead, it acts purely as a **heartbeat trigger**, periodically invoking the or
 
 All decision-making is performed dynamically inside the procedure based on metadata and execution history.
 
----
-
-## Example Usage
-
-```sql
-EXEC cfg.usp_RunScheduledBackups
-      @UseMirrorToSecondary = 1,
-      @WithVerify = 0,
-      @DryRun = 0,
-      @Debug = 0;
-```
 ---
 
 ### Execution Flow
@@ -40,6 +31,8 @@ cfg.usp_BackupDatabase        ← Execution Layer
         ↓
 log.BackupRun                 ← Telemetry
 ```
+---
+
 ### Behavior Model
 
 At each execution cycle:
@@ -48,6 +41,8 @@ At each execution cycle:
 - Executes only the necessary operations
 
 If no backups are due, the procedure exits without performing any action.
+
+---
 
 ### Design Characteristics
 
@@ -60,6 +55,8 @@ This scheduling approach provides several advantages:
 | Reduced operational complexity | A single job replaces multiple scheduled backup jobs |
 | Efficient execution | Backups run only when required, avoiding redundant operations |
 
+---
+
 ### Operational Cadence
 
 The execution interval (e.g. every 5 minutes) enables:
@@ -68,13 +65,15 @@ The execution interval (e.g. every 5 minutes) enables:
 - Fast reaction to missed or delayed backups
 - Continuous evaluation without overloading the system
 
+---
+
 ### Example Job Configuration
 
 **Job Name**: SCH_BackupScheduler
+
 **Frequency**: Every 5 minutes
 
-Step:
-
+**Step**:
 ```sql
 EXEC cfg.usp_RunScheduledBackups
     @UseMirrorToSecondary = 1,
@@ -82,6 +81,8 @@ EXEC cfg.usp_RunScheduledBackups
     @DryRun = 0,
     @Debug = 0;
 ```
+---
+
 ### Summary
 
 The scheduling layer is intentionally simple and decoupled from decision logic.
