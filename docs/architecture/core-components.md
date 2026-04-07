@@ -20,7 +20,7 @@ The orchestration layer coordinates both **backup scheduling** and **recovery va
 | Procedures |
 |------------|
 |[`[cfg].[usp_RunScheduledBackups]` ](../../docs/procedures/usp_RunScheduledBackups.md) |
-| `[cfg].[usp_RunRestoreTests]`|
+|[`[cfg].[usp_RunRestoreTests]`](../../docs/procedures/usp_RunRestoreTests.md)|
 
 This layer is responsible for:
 
@@ -41,8 +41,8 @@ The backup execution layer is responsible for performing backup operations at bo
 
 | Procedures |
 |------------|
-| `[cfg].[usp_BackupDatabase]`  |
-| `[cfg].[usp_BackupByTierAndType]`|
+|[`[cfg].[usp_BackupDatabase]`](../../docs/procedures/usp_BackupDatabase.md)|
+|[`[cfg].[usp_BackupByTierAndType]`](../../docs/procedures/usp_BackupByTierAndType.md)|
 
 This layer provides:
 
@@ -63,8 +63,8 @@ The restore execution layer is responsible for reconstructing and executing rest
 
 | Procedures |
 |------------|
-| `[cfg].[usp_RestorePointInTime]`  |
-| `[cfg].[usp_GetLatestBackupFiles]` |
+|[`[cfg].[usp_RestorePointInTime]`](../../docs/procedures/usp_RestorePointInTime.md)|
+|[`[cfg].[usp_GetLatestBackupFiles]`](../../docs/procedures/usp_GetLatestBackupFiles.md)|
 
 This layer provides:
 
@@ -84,7 +84,7 @@ The validation layer verifies that the restored database state matches the inten
 
 | Procedures | Tables |
 |------------|--------|
-| `[cfg].[usp_ValidatePitrCanary]`  | `[dbo].[PitrCanary]` |
+|[`[cfg].[usp_ValidatePitrCanary]`](../../docs/procedures/usp_RunScheduledBackups.md)|[`[dbo].[PitrCanary]`](../../sql/01_Tables/dbo.PitrCanary.md)|
 
 This layer is responsible for:
 
@@ -103,9 +103,9 @@ The configuration layer defines the policies and parameters that drive framework
 
 | Procedures | Tables |
 |------------|--------|
-| `[cfg].[usp_GetActiveBasePath]` | `[cfg].[Tier]`  |
-| `[cfg].[usp_GetRestoreTestBasePath]` | `[cfg].[DatabasePolicy]`  |
-| | `[cfg].[BackupPaths]`  |
+|[`[cfg].[usp_GetActiveBasePath]`](../../docs/procedures/usp_GetActiveBasePath.md)|[`[cfg].[Tier]`](../../sql/01_Tables/cfg.Tier.md)|
+|[`[cfg].[usp_GetRestoreTestBasePath]`](../../docs/procedures/usp_GetRestoreTestBasePath.md)|[`[cfg].[DatabasePolicy]`](../../sql/01_Tables/cfg.DatabasePolicy.md)|
+| |[`[cfg].[BackupPaths]`](../../sql/01_Tables/cfg.BackupPaths.md)|
 
 
 This layer enables:
@@ -126,9 +126,9 @@ The telemetry layer captures execution data, enabling traceability, auditing, an
 
 | Tables |
 |------------|
-| `[log].[BackupRun]`  |
-| `[log].[RestoreTestRun]`  |
-| `[log].[RestoreStepExecution]`|
+|[`[log].[BackupRun]`](../../sql/01_Tables/log.BackupRun.md)|
+|[`[log].[RestoreTestRun]`](../../sql/01_Tables/log.RestoreTestRun.md)  |
+|[`[log].[RestoreStepExecution]`](../../sql/01_Tables/log.RestoreStepExecution.md)|
 
 This layer records:
 
