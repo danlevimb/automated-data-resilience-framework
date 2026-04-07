@@ -19,7 +19,7 @@ The orchestration layer coordinates both **backup scheduling** and **recovery va
 
 | Procedures |
 |------------|
-|[`[cfg].[usp_RunScheduledBackups]` ](../docs/procedures/usp_RunScheduledBackups.md) |
+|[`[cfg].[usp_RunScheduledBackups]` ](../../docs/procedures/usp_RunScheduledBackups.md) |
 | `[cfg].[usp_RunRestoreTests]`|
 
 This layer is responsible for:
