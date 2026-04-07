@@ -7,15 +7,17 @@
 
 This section demonstrates practical usage scenarios of the framework across its main operational stages:
 
-- Backup Stage
-- Restore Stage 
-- Validation Stage
+**a) Backup Stage**
+
+**b) Restore Stage**
+
+**c) Validation Stage**
 
 Each example reflects real-world situations where the framework can be applied independently or as part of an integrated workflow.
 
 ---
 
-# Backup Stage
+# a) Backup Stage
 
 ### 1. Batch Backup Execution by Tier
 
@@ -66,7 +68,7 @@ EXEC cfg.usp_RunScheduledBackups;
 
 ---
 
-# Restore Stage
+# b) Restore Stage
 
 ### 4. Full Restore Validation Scenario
 
@@ -115,7 +117,7 @@ EXEC cfg.usp_RestorePointInTime
 
 --- 
 
-# Validation Stage
+# c) Validation Stage
 
 ### 7. Canary-Based Validation (Integrated)
 
