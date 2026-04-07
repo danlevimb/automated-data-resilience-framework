@@ -9,7 +9,7 @@ This section demonstrates practical usage scenarios of the framework across its 
 
 - Backup Stage
 - Restore Stage 
-- Recovery Validation  
+- Validation Stage
 
 Each example reflects real-world situations where the framework can be applied independently or as part of an integrated workflow.
 
@@ -41,10 +41,9 @@ EXEC cfg.usp_BackupDatabase
     @WithChecksum = 1;
 ```
 
-Use case:
-
-Emergency backup before critical operations
-Manual intervention scenarios
+**Use case:**
+- Emergency backup before critical operations
+- Manual intervention scenarios
 
 ### 3. Automated Backup Scheduling (Policy-Driven)
 
@@ -54,14 +53,18 @@ Trigger the intelligent backup scheduler.
 EXEC cfg.usp_RunScheduledBackups
     @DryRun = 1,
     @Debug = 1;
+```
+
+```sql
 EXEC cfg.usp_RunScheduledBackups;
 ```
 
-Use case:
+**Use case:**
+- Fully automated backup execution
+- Policy-driven environments
+- Continuous RPO enforcement
 
-Fully automated backup execution
-Policy-driven environments
-Continuous RPO enforcement
+---
 
 # Restore Stage
 
@@ -74,11 +77,10 @@ EXEC cfg.usp_RunRestoreTests
     @SourceDatabase = 'LabCriticalDB';
 ```
 
-Use case:
-
-Continuous recovery validation
-Disaster recovery testing
-Backup reliability verification
+**Use case:**
+- Continuous recovery validation
+- Disaster recovery testing
+- Backup reliability verification
 
 ### 5. Point-in-Time Restore (STOPAT)
 
@@ -91,10 +93,9 @@ EXEC cfg.usp_RestorePointInTime
     @StopAt = '2026-04-06 12:17:00.000';
 ```
 
-Use case:
-
-Recover from accidental updates or deletes
-Data correction after logical errors
+**Use case:**
+- Recover from accidental updates or deletes
+- Data correction after logical errors
 
 ### 6. Marker-Based Restore (STOPBEFOREMARK)
 
@@ -107,11 +108,12 @@ EXEC cfg.usp_RestorePointInTime
     @StopBeforeMark = 'RT_20260406_121500';
 ```
 
-Use case:
+***Use case:***
+- Application release rollback
+- Recovery to a known safe state
+- Controlled rollback scenarios
 
-Application release rollback
-Recovery to a known safe state
-Controlled rollback scenarios
+--- 
 
 # Validation Stage
 
@@ -125,10 +127,9 @@ EXEC cfg.usp_RunRestoreTests
     @Debug = 1;
 ```
 
-Use case:
-
-Validate recovery boundaries automatically
-Ensure data integrity across restore operations
+**Use case:**
+- Validate recovery boundaries automatically
+- Ensure data integrity across restore operations
 
 ### 8. Manual Canary Validation
 
@@ -141,18 +142,19 @@ EXEC cfg.usp_ValidatePitrCanary
     @MarkName = 'RT_20260406_121500';
 ```
 
-Use case:
+**Use case:**
+- Targeted validation of recovery scenarios
+- Independent verification workflows
 
-Targeted validation of recovery scenarios
-Independent verification workflows
-Advanced Scenarios
+---
+
+#Advanced Scenarios
 
 ### 9. Recovery After Critical Data Corruption
 
 Scenario:
-
-Accidental UPDATE without WHERE
-Restore required to precise moment
+- Accidental `UPDATE` without `WHERE`
+- Restore required to precise moment
 
 ```sql
 EXEC cfg.usp_RestorePointInTime
@@ -185,23 +187,19 @@ EXEC cfg.usp_RestorePointInTime
 Retrieve execution history:
 
 ```sql
-SELECT *
-FROM log.BackupRun
-ORDER BY StartedAt DESC;
-SELECT *
-FROM log.RestoreTestRun
-ORDER BY StartedAt DESC;
-SELECT *
-FROM log.RestoreStepExecution
-ORDER BY RestoreRunID, StepOrder;
+SELECT * FROM log.BackupRun ORDER BY StartedAt DESC;
+SELECT * FROM log.RestoreTestRun ORDER BY StartedAt DESC;
+SELECT * FROM log.RestoreStepExecution ORDER BY RestoreRunID, StepOrder;
 ```
 
-Use case:
+**Use case:**
+- Audit compliance
+- Forensic analysis
+- Performance tracking
 
-Audit compliance
-Forensic analysis
-Performance tracking
-Summary
+---
+
+# Summary
 
 The framework supports multiple usage patterns:
 
