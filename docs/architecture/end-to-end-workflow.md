@@ -84,7 +84,7 @@ This metadata is used to:
 
 ### 6. Scenario Definition (Orchestration)
 
-The orchestration layer defines the recovery validation scenario using [`cfg.usp_RunRestoreTests`](../../docs/procedures/usp_RunRestoreTests.md)
+The orchestration layer defines the recovery validation scenario using [`[cfg].[usp_RunRestoreTests]`](../../docs/procedures/usp_RunRestoreTests.md)
 
 This step:
 
