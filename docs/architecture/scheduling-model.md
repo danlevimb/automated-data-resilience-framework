@@ -1,3 +1,8 @@
+<p align="center">
+<a href="../../README.md">Home</a> |
+<a href="../architecture.md">Back</a>
+</p>
+
 ## Scheduling Model
 
 The framework uses a **lightweight, trigger-based scheduling model** powered by SQL Server Agent.
