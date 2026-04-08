@@ -176,7 +176,7 @@ ORDER BY StartedAt DESC;
   <img src="images/Backup_Execution_Evidence_Step6.JPG" width="900">
 </p>
 
-Interpretation
+### Interpretation
 
 Observed pattern:
 - LOG backups executed at consistent intervals
