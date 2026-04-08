@@ -130,10 +130,8 @@ ORDER BY BackupRunID DESC;
 🔍 Evidence: Telemetry Output
 
 <p align="center">
-  <img src="images/Backup_Execution_Evidence_Step4.JPG" width="900">
+  <img src="images/Backup_Execution_Evidence_Step4_1.JPG" width="900">
 </p>
-
-SSMS result showing BackupRun entries
 
 ### Interpretation
 
@@ -149,58 +147,59 @@ Each scheduler execution generates a unique CorrelationID.
 
 🔍 Evidence: Correlation Consistency
 
-👉 [INSERT SCREENSHOT HERE]
-Highlight multiple rows sharing the same CorrelationID
+<p align="center">
+  <img src="images/Backup_Execution_Evidence_Step5.JPG" width="900">
+</p>
 
-Interpretation
+### Interpretation
 
 This confirms that:
+- The framework groups operations per execution cycle
+- Execution traceability is preserved
+- Multi-database operations are logically linked
 
-The framework groups operations per execution cycle
-Execution traceability is preserved
-Multi-database operations are logically linked
-Step 6 — Cadence Validation
+# Step 6 — Cadence Validation
 
 Review LOG backup timing:
 
-SELECT
-    DatabaseName,
-    BackupType,
-    StartedAt
+```sql
+SELECT DatabaseName, BackupType, StartedAt
 FROM log.BackupRun
 WHERE DatabaseName = 'LabCriticalDB'
   AND BackupType = 'LOG'
 ORDER BY StartedAt DESC;
+```
+
 🔍 Evidence: LOG Cadence
 
-👉 [INSERT SCREENSHOT HERE]
-Show multiple LOG backups at ~15-minute intervals
+<p align="center">
+  <img src="images/Backup_Execution_Evidence_Step6.JPG" width="900">
+</p>
 
 Interpretation
 
 Observed pattern:
-
-LOG backups executed at consistent intervals
-FULL backups do not reset LOG cadence
+- LOG backups executed at consistent intervals
+- FULL backups do not reset LOG cadence
 
 This validates:
+- Stable RPO enforcement
+- Continuous recoverability coverage
 
-Stable RPO enforcement
-Continuous recoverability coverage
-Key Observations
-Backup decisions are made dynamically at runtime
-Execution is aligned with policy configuration
-No redundant backups are generated
-Telemetry provides full traceability
-LOG cadence remains consistent even after FULL execution
-Conclusion
+# Key Observations
+- Backup decisions are made dynamically at runtime
+- Execution is aligned with policy configuration
+- No redundant backups are generated
+- Telemetry provides full traceability
+- LOG cadence remains consistent even after FULL execution
+
+# Conclusion
 
 This execution demonstrates that the framework:
-
-Operates as a policy-driven scheduling system
-Maintains consistent backup cadence
-Produces reliable and traceable execution records
-Ensures continuous data protection readiness
+- Operates as a policy-driven scheduling system
+- Maintains consistent backup cadence
+- Produces reliable and traceable execution records
+- Ensures continuous data protection readiness
 
 The system does not rely on static job definitions, but instead evaluates and executes backups based on real-time conditions and historical context.
 
