@@ -1,3 +1,8 @@
+<p align="center">
+<a href="../README.md">Home</a> |
+<a href="scheduler-behavior.md">Back</a>
+</p>
+
 # Scenario 7 — Multiple Databases, Independent Decisions
 ### Multiple databases evaluated in a single execution cycle.
 
