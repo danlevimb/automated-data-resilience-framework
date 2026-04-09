@@ -40,23 +40,11 @@ EXEC cfg.usp_RunScheduledBackups
   - [Scenario 1 — No Backup Due](scheduler-behavior-1.md)
   - [Scenario 2 — LOG Backup Due](scheduler-behavior-2.md)
   - [Scenario 3 — FULL Backup Due](scheduler-behavior-3.md)
+  - [Scenario 4 — DIFF Backup Due](scheduler-behavior-3.md)
 
 --- 
 
-# Scenario 4 — DIFF Backup Due
-### Differential backup is required based on effective baseline.
 
-### 🔍 Evidence
-  - `DiffDue = 1`
-  - `SelectedBackupType = DIFF`
-
-<p align="center">
-  <img src="../../docs/evidence/images/Scenario4_DIFFBackupDue.jpg" width="900">
-</p>
-
-### Interpretation
-  - DIFF is evaluated against the latest effective baseline (FULL or DIFF)
-  - Restore chain consistency is maintained
 
 # Scenario 5 — Recovery Model Constraint
 ### Database is configured with SIMPLE recovery model.
