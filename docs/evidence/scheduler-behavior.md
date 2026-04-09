@@ -28,15 +28,6 @@ The scheduler operates under a **trigger-based model**:
   - Configuration ([`[cfg].[Tier]`](../../sql/01_Tables/cfg.Tier.md), [`[cfg].[DatabasePolicy]`](../../sql/01_Tables/cfg.DatabasePolicy.md))  
   - Execution history ([`[log].[BackupRun]`](../../sql/01_Tables/log.BackupRun.md))  
 
----
-
-# Scenario 1 — No Backup Due
-### Description
-
-No backup frequency thresholds have been reached.
-
----
-
 ### Execution
 
 ```sql
@@ -44,11 +35,17 @@ EXEC cfg.usp_RunScheduledBackups
     @DryRun = 1,
     @Debug = 1;
 ```
+---
+
+# Scenario 1 — No Backup Due
+### Description
+
+No backup frequency thresholds have been reached.
 
 ### 🔍 Evidence
 Decision matrix showing:
-  - SelectedBackupType = NULL
-  - DecisionReason = 'No backup due in current cycle'
+  - `SelectedBackupType = NULL`
+  - `DecisionReason = 'No backup due in current cycle'`
 
 <p align="center">
   <img src="../../docs/evidence/images/Scenario1_NoBackupDue.jpg" width="900">
@@ -58,6 +55,8 @@ Decision matrix showing:
   - The scheduler evaluates correctly
   - No unnecessary backups are executed
   - System remains idle when no action is required
+
+--- 
 
 # Scenario 2 — LOG Backup Due
 ### Description
@@ -79,14 +78,16 @@ Decision matrix showing:
   - Frequency is respected per Tier configuration
   - RPO enforcement is consistent
 
+--- 
+
 # Scenario 3 — FULL Backup Due
 ### Description
 
 Full backup frequency threshold has been reached.
 
-🔍 Evidence
-    - `FullDue = 1`
-    - `SelectedBackupType = FULL`
+### 🔍 Evidence
+  - `FullDue = 1`
+  - `SelectedBackupType = FULL`
 
 <p align="center">
   <img src="../../docs/evidence/images/Scenario3_FullBackupDue.jpg" width="900">
@@ -96,6 +97,8 @@ Full backup frequency threshold has been reached.
   - FULL backups take precedence over other types
   - Baseline reset is correctly applied
   - DIFF chain integrity is preserved
+
+--- 
 
 # Scenario 4 — DIFF Backup Due
 ### Description
@@ -116,10 +119,13 @@ Differential backup is required based on effective baseline.
 
 Database is configured with SIMPLE recovery model.
 
-🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]
+### 🔍 Evidence
   - `recovery_model_desc = SIMPLE`
   - `SelectedBackupType = NULL`
+
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario5_RecoveryModelConstraint.jpg" width="900">
+</p>
 
 ### Interpretation
   - LOG backups are correctly skipped
@@ -132,11 +138,14 @@ Database is configured with SIMPLE recovery model.
 A FULL backup is executed, followed shortly by a scheduler cycle.
 
 🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]  
   - Recent FULL backup exists
-  - `LastLogAt` still older than LOG frequency
-  - `SelectedBackupType = LOG`
-
+  - LOG backup 5 minutes after
+  - LOG backup rate follows own timing rules
+  
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario6_LOGCadence.jpg" width="900">
+</p>
+    
 ### Interpretation
   - LOG cadence remains stable
   - FULL backups do not reset LOG timing
@@ -147,14 +156,11 @@ A FULL backup is executed, followed shortly by a scheduler cycle.
 
 Multiple databases evaluated in a single execution cycle.
 
-🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]
+### 🔍 Evidence
 
-|DatabaseName |	SelectedBackupType |
-|-------|--------|
-|LabCriticalDB | LOG |
-|TestCDC | LOG |
-|WideWorldImporters |	NULL |
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario2_LOGBackupDue.jpg" width="900">
+</p>
 
 ### Interpretation
   - Each database is evaluated independently
@@ -174,6 +180,9 @@ SELECT DatabaseName, BackupType, CorrelationID
 FROM log.BackupRun
 ORDER BY StartedAt DESC;
 ```
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario8_CorrelationAcrossExecution.jpg" width="900">
+</p>
 
 ### Interpretation
   - All operations share a common CorrelationID
@@ -185,10 +194,12 @@ ORDER BY StartedAt DESC;
 
 A backup operation is currently running.
 
-🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]
-  - `HasRunningBackup = 1`
+### 🔍 Evidence
   - Database is skipped
+
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario9_BackupAlreadyinProgress.jpg" width="900">
+</p>
 
 ### Interpretation
   - The scheduler avoids overlapping operations
@@ -209,9 +220,15 @@ WHERE TierID = 0;
 ```
 
 🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]
   - Scheduler adapts immediately
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario10_DynamicPolicyChange_1.jpg" width="900">
+</p>
+
   - New frequency is applied without restart
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario10_DynamicPolicyChange_2.jpg" width="900">
+</p>
 
 ### Interpretation
   - System is fully metadata-driven
