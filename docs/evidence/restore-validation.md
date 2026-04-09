@@ -28,11 +28,13 @@ The framework uses a [**canary-based validation model**](references/canary-valid
 
 Then:
 
-- Restore the database **before the mark**  
-- Validate that Target Database:
-  - BEFORE exists ✅  
-  - MARK does not exist ❌  
-  - AFTER does not exist ❌  
+- Restore the database and **stop before the mark**  
+- Validate these conditions comply:
+
+|                 | BEFORE | MARK | AFTER |
+|-----------------|--------|------|-------|
+| SOURCE DATABASE |    1   |   1  |   1   |
+| TARGET DATABASE |    1   |   0  |   0   |
 
 ---
 
@@ -99,8 +101,7 @@ BEGIN TRAN [RT_436935403] WITH MARK N'LabCriticalDB_RT_2026-04-08 12:37:43.69354
 COMMIT TRAN [RT_436935403];
 
 4.0: >>> CREATING LOG-BACKUP #1 (THIS FILE CONTAINS MARK TO STOP IN) >>> 
-BACKUP LOG [LabCriticalDB] TO DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_MARK_20260408_1237436935403_01.trn' WITH INIT, CHECKSUM, COMPRESSION;                
-                
+BACKUP LOG [LabCriticalDB] TO DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_MARK_20260408_1237436935403_01.trn' WITH INIT, CHECKSUM, COMPRESSION;
 Processed 9 pages for database 'LabCriticalDB', file 'LabCriticalDB_log' on file 1.
 BACKUP LOG successfully processed 9 pages in 0.175 seconds (0.379 MB/sec).
 
@@ -126,7 +127,7 @@ The framework creates controlled markers in the source database.
 🔍 Evidence: Canarys created at Source Database
 ```sql
 SELECT *
-FROM dbo.PitrCanary
+FROM [LabCriticalDB].dbo.PitrCanary
 ORDER BY CreatedAt DESC;
 ```
 
@@ -170,23 +171,28 @@ DBG Mark LSN  =[69000000365600004]
 DBG Mark Time =[2026-04-08 12:37:43.693]
  
 1.0: >>> RESTORE-CHAIN SUCCESSFULLY BUILT >>> 
+
 3.1: >>> RESTORING... >>>
 RESTORE DATABASE [LabCriticalDB_RestoreTest] FROM DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_FULL_20260408_1225040376118.bak' WITH NORECOVERY, REPLACE, MOVE N'LabCriticalDB' TO N'C:\BD\Backup\RESTORE_TEST\LabCriticalDB_RestoreTest_DATA.mdf', MOVE N'LabCriticalDB_log' TO N'C:\BD\Backup\RESTORE_TEST\LabCriticalDB_RestoreTest_LOG.ldf';
 Processed 856 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB' on file 1.
 Processed 2 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB_log' on file 1.
 RESTORE DATABASE successfully processed 858 pages in 0.242 seconds (27.682 MB/sec).
+
 3.2: >>> RESTORING... >>>
 RESTORE LOG [LabCriticalDB_RestoreTest] FROM DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_20260408_1235035471679.trn' WITH NORECOVERY;
 Processed 0 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB' on file 1.
 Processed 20 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB_log' on file 1.
 RESTORE LOG successfully processed 20 pages in 0.057 seconds (2.741 MB/sec).
+
 3.3: >>> RESTORING... >>>
 RESTORE LOG [LabCriticalDB_RestoreTest] FROM DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_MARK_20260408_1237436935403_01.trn' WITH STOPBEFOREMARK = N'RT_436935403', RECOVERY;
 Processed 0 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB' on file 1.
 Processed 9 pages for database 'LabCriticalDB_RestoreTest', file 'LabCriticalDB_log' on file 1.
 RESTORE LOG successfully processed 9 pages in 0.053 seconds (1.252 MB/sec).
+
 4.0: >>> SET DATABASE ACCES MULTI-USER >>> 
 ALTER DATABASE [LabCriticalDB_RestoreTest] SET MULTI_USER;
+
 4.1: >>> CHECK NEWLY-RESTORED DATABASE >>> 
 DBCC CHECKDB([LabCriticalDB_RestoreTest]) WITH NO_INFOMSGS;
  
@@ -201,7 +207,7 @@ Validate the restored database:
 
 ```sql
 SELECT *
-FROM LabCriticalDB_RestoreTest.dbo.PitrCanary
+FROM [LabCriticalDB_RestoreTest].dbo.PitrCanary
 ORDER BY CreatedAt DESC;
 ```
 
@@ -216,8 +222,6 @@ ORDER BY CreatedAt DESC;
   <img src="images/Restore_Validation_Evidence_Step4.jpg" width="900">
 </p>
 
-
-
 ### Interpretation
 
 This confirms that:
@@ -229,24 +233,26 @@ This confirms that:
 
 Review restore execution records:
 
-🔍 Evidence: Restore Telemetry
+🔍 Evidence: Restore Telemetry (Header)
 
 ```sql
 SELECT *
 FROM log.RestoreTestRun
+WHERE RestoreRunID = 10246
 ORDER BY StartedAt DESC;
 ```
+
 |Column| Value|
 |---|---|
-|RestoreRunID	| 10246|
-|CorrelationID	|41865FAE-891D-42D5-B94F-811D73CA5989|
-|StartedAt	|08/04/2026 12:37|
-|EndedAt	|08/04/2026 12:37|
+|RestoreRunID | 10246 |
+|CorrelationID |41865FAE-891D-42D5-B94F-811D73CA5989|
+|StartedAt |08/04/2026 12:37|
+|EndedAt |08/04/2026 12:37|
 |SourceDatabase	|LabCriticalDB|
-|TargetDatabase|	LabCriticalDB_RestoreTest|
-|StopAt|	08/04/2026 12:37|
-|FullBackupFile	|C:\BD\Backup\PRIMARY\LabCriticalDB_FULL_20260408_1225040376118.bak|
-|DiffBackupFile|	NULL|
+|TargetDatabase| LabCriticalDB_RestoreTest|
+|StopAt| 08/04/2026 12:37|
+|FullBackupFile | C:\BD\Backup\PRIMARY\LabCriticalDB_FULL_20260408_1225040376118.bak|
+|DiffBackupFile| NULL|
 |LogBackupFilesCount|	2|
 |DataFileTarget|	C:\BD\Backup\RESTORE_TEST\LabCriticalDB_RestoreTest_DATA.mdf|
 |LogFileTarget|	C:\BD\Backup\RESTORE_TEST\LabCriticalDB_RestoreTest_LOG.ldf|
@@ -264,6 +270,8 @@ ORDER BY StartedAt DESC;
 |CanaryPassed|	1|
 |CanaryMessage|	PITR Canary VALID: STOPBEFOREMARK respected. BEFORE exists in target; MARK and AFTER are absent.|
 |MarkLogFile|	C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_MARK_20260408_1237436935403_01.trn|
+
+🔍 Evidence: Restore Telemetry (Detail)
 
 ```sql
 SELECT *
