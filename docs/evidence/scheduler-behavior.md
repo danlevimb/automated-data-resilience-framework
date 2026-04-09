@@ -42,29 +42,15 @@ EXEC cfg.usp_RunScheduledBackups
   - [Scenario 3 — FULL Backup Due](scheduler-behavior-3.md)
   - [Scenario 4 — DIFF Backup Due](scheduler-behavior-4.md)
   - [Scenario 5 — Recovery Model Constraint](scheduler-behavior-5.md)
-  - 
+  - [Scenario 6 — FULL Does Not Reset LOG Cadence](scheduler-behavior-6.md)
+
 --- 
 
 
 
 
 
-# Scenario 6 — FULL Does Not Reset LOG Cadence
-## A FULL backup is executed, followed shortly by a scheduler cycle.
 
-### 🔍 Evidence
-  - Recent FULL backup exists
-  - LOG backup 5 minutes after
-  - LOG backup rate follows own timing rules
-  
-<p align="center">
-  <img src="../../docs/evidence/images/Scenario6_LOGCadence.jpg" width="900">
-</p>
-    
-### Interpretation
-  - LOG cadence remains stable
-  - FULL backups do not reset LOG timing
-  - RPO is preserved independently
 
 # Scenario 7 — Multiple Databases, Independent Decisions
 ### Multiple databases evaluated in a single execution cycle.
