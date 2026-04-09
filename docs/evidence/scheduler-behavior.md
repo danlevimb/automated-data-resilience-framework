@@ -55,23 +55,27 @@ Decision matrix showing:
   - DecisionReason = 'No backup due in current cycle'
   - 
 ## Interpretation
-The scheduler evaluates correctly
-No unnecessary backups are executed
-System remains idle when no action is required
-Scenario 2 — LOG Backup Due
-Description
+  - The scheduler evaluates correctly
+  - No unnecessary backups are executed
+  - System remains idle when no action is required
+
+# Scenario 2 — LOG Backup Due
+
+## Description
 
 Transaction log frequency has been exceeded.
 
 🔍 Evidence
 
 👉 [INSERT SCREENSHOT HERE]
-Decision matrix showing:
 
-LogDue = 1
-SelectedBackupType = LOG
-DecisionReason = 'LOG frequency reached'
-Interpretation
+*Decision matrix showing:*
+
+- `LogDue = 1`
+- `SelectedBackupType = LOG`
+- `DecisionReason = 'LOG frequency reached'`
+
+## Interpretation
 LOG backups are triggered precisely when required
 Frequency is respected per Tier configuration
 RPO enforcement is consistent
