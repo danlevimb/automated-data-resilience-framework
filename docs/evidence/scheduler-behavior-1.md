@@ -1,3 +1,8 @@
+<p align="center">
+<a href="../../README.md">Home</a> |
+<a href="scheduler-behavior.md">Back</a>
+</p>
+
 # Scenario 1 — No Backup Due
 ### No backup frequency thresholds have been reached.
 
