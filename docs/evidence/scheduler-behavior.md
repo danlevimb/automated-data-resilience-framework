@@ -43,28 +43,12 @@ EXEC cfg.usp_RunScheduledBackups
   - [Scenario 4 — DIFF Backup Due](scheduler-behavior-4.md)
   - [Scenario 5 — Recovery Model Constraint](scheduler-behavior-5.md)
   - [Scenario 6 — FULL Does Not Reset LOG Cadence](scheduler-behavior-6.md)
+  - [Scenario 7 — Multiple Databases, Independent Decisions](scheduler-behavior-7.md)
+
 
 --- 
 
 
-
-
-
-
-
-# Scenario 7 — Multiple Databases, Independent Decisions
-### Multiple databases evaluated in a single execution cycle.
-
-### 🔍 Evidence
-
-<p align="center">
-  <img src="../../docs/evidence/images/Scenario2_LOGBackupDue.jpg" width="900">
-</p>
-
-### Interpretation
-  - Each database is evaluated independently
-  - Different decisions can coexist in the same cycle
-  - Scheduler behaves as a per-database decision engine
 
 # Scenario 8 — Correlation Across Execution
 ### Multiple backups executed within the same scheduler run.
