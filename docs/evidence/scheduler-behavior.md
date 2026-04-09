@@ -39,23 +39,7 @@ EXEC cfg.usp_RunScheduledBackups
 
   - [Scenario 1 — No Backup Due](scheduler-behavior-1.md)
   - [Scenario 2 — LOG Backup Due](scheduler-behavior-2.md)
-
-
-# Scenario 3 — FULL Backup Due
-### Full backup frequency threshold has been reached.
-
-### 🔍 Evidence
-  - `FullDue = 1`
-  - `SelectedBackupType = FULL`
-
-<p align="center">
-  <img src="../../docs/evidence/images/Scenario3_FullBackupDue.jpg" width="900">
-</p>
-
-### Interpretation
-  - FULL backups take precedence over other types
-  - Baseline reset is correctly applied
-  - DIFF chain integrity is preserved
+  - [Scenario 3 — FULL Backup Due](scheduler-behavior-3.md)
 
 --- 
 
