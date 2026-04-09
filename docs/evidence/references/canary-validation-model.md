@@ -1,5 +1,5 @@
 <p align="center">
-<a href="../../README.md">Home</a> |
+<a href="../../../README.md">Home</a> |
 <a href="../architecture.md">Architecture</a>
 </p>
 
