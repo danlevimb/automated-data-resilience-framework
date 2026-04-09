@@ -38,9 +38,7 @@ EXEC cfg.usp_RunScheduledBackups
 ---
 
 # Scenario 1 — No Backup Due
-### Description
-
-No backup frequency thresholds have been reached.
+### No backup frequency thresholds have been reached.
 
 ### 🔍 Evidence
 Decision matrix showing:
@@ -59,9 +57,7 @@ Decision matrix showing:
 --- 
 
 # Scenario 2 — LOG Backup Due
-### Description
-
-Transaction log frequency has been exceeded.
+### Transaction log frequency has been exceeded.
 
 ### 🔍 Evidence
 Decision matrix showing:
@@ -81,9 +77,7 @@ Decision matrix showing:
 --- 
 
 # Scenario 3 — FULL Backup Due
-### Description
-
-Full backup frequency threshold has been reached.
+### Full backup frequency threshold has been reached.
 
 ### 🔍 Evidence
   - `FullDue = 1`
@@ -101,9 +95,7 @@ Full backup frequency threshold has been reached.
 --- 
 
 # Scenario 4 — DIFF Backup Due
-### Description
-
-Differential backup is required based on effective baseline.
+### Differential backup is required based on effective baseline.
 
 ### 🔍 Evidence
   - `DiffDue = 1`
@@ -118,9 +110,7 @@ Differential backup is required based on effective baseline.
   - Restore chain consistency is maintained
 
 # Scenario 5 — Recovery Model Constraint
-### Description
-
-Database is configured with SIMPLE recovery model.
+### Database is configured with SIMPLE recovery model.
 
 ### 🔍 Evidence
   - `recovery_model_desc = SIMPLE`
@@ -136,9 +126,7 @@ Database is configured with SIMPLE recovery model.
   - No invalid operations are attempted
 
 # Scenario 6 — FULL Does Not Reset LOG Cadence
-## Description
-
-A FULL backup is executed, followed shortly by a scheduler cycle.
+## A FULL backup is executed, followed shortly by a scheduler cycle.
 
 ### 🔍 Evidence
   - Recent FULL backup exists
@@ -155,9 +143,7 @@ A FULL backup is executed, followed shortly by a scheduler cycle.
   - RPO is preserved independently
 
 # Scenario 7 — Multiple Databases, Independent Decisions
-### Description
-
-Multiple databases evaluated in a single execution cycle.
+### Multiple databases evaluated in a single execution cycle.
 
 ### 🔍 Evidence
 
@@ -171,9 +157,7 @@ Multiple databases evaluated in a single execution cycle.
   - Scheduler behaves as a per-database decision engine
 
 # Scenario 8 — Correlation Across Execution
-### Description
-
-Multiple backups executed within the same scheduler run.
+### Multiple backups executed within the same scheduler run.
 
 ### 🔍 Evidence
 ```sql
@@ -191,9 +175,7 @@ ORDER BY StartedAt DESC;
   - Traceability across operations is ensured
 
 # Scenario 9 — Backup Already in Progress
-### Description
-
-A backup operation is currently running.
+### A backup operation is currently running.
 
 ### 🔍 Evidence
   - Database is skipped
@@ -208,9 +190,7 @@ A backup operation is currently running.
   - System stability is preserved
 
 # Scenario 10 — Dynamic Policy Change
-### Description
-
-Tier configuration or database policy is modified.
+### Tier configuration or database policy is modified.
 
 ```sql
 UPDATE cfg.Tier
@@ -234,7 +214,7 @@ WHERE TierID = 0;
   - No job changes required
   - Behavior adjusts dynamically
 
-### Key Observations
+# Key Observations
   - Decisions are made at runtime, not predefined
   - Backup execution is demand-driven
   - System adapts instantly to configuration changes
