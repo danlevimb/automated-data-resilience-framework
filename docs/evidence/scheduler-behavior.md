@@ -46,14 +46,14 @@ EXEC cfg.usp_RunScheduledBackups
 ```
 
 ### 🔍 Evidence
+Decision matrix showing:
+  - SelectedBackupType = NULL
+  - DecisionReason = 'No backup due in current cycle'
+
 <p align="center">
   <img src="../../docs/evidence/images/Scenario1_NoBackupDue.jpg" width="900">
 </p>
 
-Decision matrix showing:
-  - SelectedBackupType = NULL
-  - DecisionReason = 'No backup due in current cycle'
-  
 ### Interpretation
   - The scheduler evaluates correctly
   - No unnecessary backups are executed
@@ -65,12 +65,14 @@ Decision matrix showing:
 Transaction log frequency has been exceeded.
 
 🔍 Evidence
-👉 [INSERT SCREENSHOT HERE]
-
-*Decision matrix showing:*
+Decision matrix showing:
   - `LogDue = 1`
   - `SelectedBackupType = LOG`
   - `DecisionReason = 'LOG frequency reached'`
+
+<p align="center">
+  <img src="../../docs/evidence/images/Scenario2_LOGBackupDue.jpg" width="900">
+</p>
 
 ### Interpretation
   - LOG backups are triggered precisely when required
