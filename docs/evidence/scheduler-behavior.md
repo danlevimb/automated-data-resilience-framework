@@ -48,14 +48,6 @@ EXEC cfg.usp_RunScheduledBackups
 
 --- 
 
-
-
-
-### Interpretation
-  - All operations share a common CorrelationID
-  - Execution grouping is preserved
-  - Traceability across operations is ensured
-
 # Scenario 9 — Backup Already in Progress
 ### A backup operation is currently running.
 
