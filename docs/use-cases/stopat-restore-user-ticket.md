@@ -109,6 +109,7 @@ The user reported:
 The exact time of the incident is unknown.
 
 The system must determine:
+
     - when the data transitioned from valid to corrupted
     - how to identify the correct recovery point
     - how to restore without affecting valid post-incident data
@@ -283,8 +284,8 @@ It proves that backup systems must be complemented with deterministic recovery v
 
 Final Outcome
 
-✔ Incident successfully analyzed
-✔ STOPAT precisely identified
-✔ Data restored correctly
-✔ Production repaired safely
-✔ Data integrity fully restored
+   ✔ Incident successfully analyzed  
+   ✔ STOPAT precisely identified  
+   ✔ Data restored correctly  
+   ✔ Production repaired safely  
+   ✔ Data integrity fully restored  
