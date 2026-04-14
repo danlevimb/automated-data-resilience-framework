@@ -36,7 +36,7 @@ The issue originated from an unintended execution of a bulk update statement wit
 
 The system continued normal operation after the incident, including:
 
-- DMLs ocurring in high-rate transaction table.
+- High-frequency transactional activity (continuous DML operations).
 - ON-LINE Backup Job-agents (LOGs every 15 minutes by policy)
 
 This created a mixed dataset containing:
@@ -62,7 +62,7 @@ SUMMARY:
 DETAILED DESCRIPTION:
    The Business Operations team reported inconsistencies in order amounts within the production system. 
 
-   Several records in the `app.Orders` table show incorrect values, impacting downstream processes and reporting accuracy. The incident ocurred around 11:00 am.
+   Several records in the `app.Orders` table show incorrect values, impacting downstream processes and reporting accuracy. The incident is estimated to have occurred around 11:00 AM.
 
 SUSPECTED ROOT CAUSE:
    An unintended execution of a bulk update statement:
@@ -73,7 +73,7 @@ SUSPECTED ROOT CAUSE:
 
 The user reported:
 
-> “The incident ocurred around 11:00 am.”
+> “The incident is estimated to have occurred around 11:00 AM.”
 
 ⚠️ This time is a nearby starting point.
 
@@ -104,7 +104,7 @@ The system must determine:
 
 A forensic, evidence-driven approach is used:
 
-1 - Define initial incident window (10:00 am - 12:00 pm)
+1 - Define initial incident window (10:00 am - 12:00 pm)  
 2 - Perform exploratory restores  
 3 - Identify GOOD vs BAD states  
 4 - Narrow the time boundary  
@@ -113,6 +113,16 @@ A forensic, evidence-driven approach is used:
 7 - Compare datasets  
 8 - Repair affected records  
 9 - Validate final state  
+
+### Why Full Restore Was Not Used
+
+A full database restore was not considered appropriate due to:
+
+- Presence of valid post-incident transactions
+- Continuous system operation after the corruption event
+- Risk of losing legitimate new data
+
+Instead, a targeted recovery and repair approach was used to preserve valid data while correcting only the affected records.
 
 ### Validation of dataset values
 
@@ -126,11 +136,22 @@ ORDER BY OrderCreatedAt DESC;
 
 ### STOPAT Selection Methodology
 
-We have an aproximate hour of incident (~11:00 am), we use that hour as a mid time real incident happened, so we determine STOPAT by doing
+The user-reported time (11:00 am) was used only as an initial reference point to define the investigation window. (10:00 am - 12:00 pm)
 
-1 - exploratory restores.
-2 - GOOD vs BAD validation
-3 - iterative narrowing (binary search approach)
+The actual STOPAT value will be determined through an iterative process based on data validation, not user input, by doing:
+
+   1 - exploratory restores.  
+   2 - GOOD vs BAD validation  
+   3 - iterative narrowing (binary search approach)  
+
+### Data State Model
+
+After the incident, the dataset was divided into two logical states:
+
+- Historical records → corrupted (Amount = 0)
+- New records → valid (post-incident inserts)
+
+This dual-state condition required selective repair instead of full rollback.
 
 ### Exploratory Restore Process
 
@@ -167,6 +188,24 @@ We close the gap by testing the state GOOD vs BAD. If the result is good, we mov
 |16|	10:25:10.500	|[GOOD](images/ERP_10_25_10_500.JPG)|
 |17|	10:25:10.250	|[GOOD](images/ERP_10_25_10_250.JPG)|
 
+### What happened?
+```text
+TIME  ─────────────────────────────────────────▶
+
+GOOD STATE            INCIDENT               BAD STATE
+   │                      │                      │
+   │                      ▼                      │
+   │             [UPDATE WITHOUT WHERE]          │
+   │                                             │
+   ▼                                             ▼
+
+10:25:10.250        ← STOPAT SELECTED        10:25:10.500
+
+       ▲
+       │
+       └── Last Known Valid State (Chosen for Recovery)
+```
+       
 ### Final STOPAT
 `2026-04-13 10:25:10.250`
 
@@ -252,7 +291,7 @@ This use case demonstrates a complete incident recovery workflow:
 
 It proves that backup systems must be complemented with deterministic recovery validation and repair strategies.
 
-Final Outcome
+### Final Outcome
 
    ✔ Incident successfully analyzed  
    ✔ STOPAT precisely identified  
