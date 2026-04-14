@@ -109,46 +109,33 @@ The user reported:
 The exact time of the incident is unknown.
 
 The system must determine:
-
-    - when the data transitioned from valid to corrupted
-    - how to identify the correct recovery point
-    - how to restore without affecting valid post-incident data
-    - how to repair production safely
+- when the data transitioned from valid to corrupted
+- how to identify the correct recovery point
+- how to restore without affecting valid post-incident data
+- how to repair production safely
 
 ### Recovery Strategy
 
 A forensic, evidence-driven approach is used:
+1 Define initial incident window  
+2 Perform exploratory restores  
+3 Identify GOOD vs BAD states  
+4 Narrow the time boundary  
+5 Determine optimal STOPAT  
+6 Restore clean reference database  
+7 Compare datasets  
+8 Repair affected records  
+9 Validate final state  
 
-    1 - Define initial incident window  
-    2 - Perform exploratory restores  
-    3 - Identify GOOD vs BAD states  
-    4 - Narrow the time boundary  
-    5 - Determine optimal STOPAT  
-    6 - Restore clean reference database  
-    7 - Compare datasets  
-    8 - Repair affected records  
-    9 - Validate final state  
+### Validation of dataset values
 
-Execution Timeline (Actual Events)
-| Time | Event |
-|------|-------|
-|10:20 |Last known good log backup |
-|10:25 | Incident occurs (UPDATE without WHERE)|
-|10:30 | New valid inserts occur|
-|10:35 | Log backup captures incident|
-|12:25 | Incident reported|
-
-### Evidence — Mixed Dataset (Critical Insight)
-
-Query showing corrupted values (Amount = 0)
+Through query showing corrupted values (Amount = 0)
 
 ```sql
 SELECT TOP (50) *
 FROM app.Orders
 ORDER BY OrderCreatedAt DESC;
 ```
-📸 [INSERT SCREENSHOT]
-
 What we see:
 
 - corrupted historical records
@@ -158,53 +145,51 @@ What we see:
 
 ### STOPAT Selection Methodology
 
-STOPAT was not derived from user input.
+We have an aproximate hour of incident (~11:00 am), we use that hour as a mid time real incident happened, so we determine STOPAT by doing
 
-Instead, it was determined using:
-
-- exploratory restores
-- GOOD vs BAD validation
-- iterative narrowing (binary search approach)
+1 exploratory restores.
+2 GOOD vs BAD validation
+3 iterative narrowing (binary search approach)
 
 ### Exploratory Restore Process
 
-Multiple restores were executed:
+The recovering process we use is:
 
-||
-| STOPAT | Result | Evidence |
-|---|---|---|
-|10:50 | BAD | HERE |
-|10:30 | BAD | HERE |
-| 10:15 | GOOD | HERE |
-|10:25 | Boundary |
-|10:25:10 | Final precision |
-
-📸 [INSERT SCREENSHOT]
-Example restore execution
-
-### Final STOPAT
-`2026-04-13 10:25:10.500`
-
-This represents the last known valid state before corruption.
-
-### Restore Execution
 ```sql
 EXEC cfg.usp_RestorePointInTime
     @SourceDatabase = 'LabCriticalDB',
     @TargetDatabase = 'LabCriticalDB_StopAt',
-    @StopAt = '2026-04-13 10:25:10.500',
+    @StopAt = '2026-04-13 11:00:00.000',
     @DoCheckDB = 1,
     @ReplaceTarget = 1;
 ```
-### Evidence — Restored Clean Data
 
-📸 [INSERT SCREENSHOT]
+We close the gap by testing the state GOOD vs BAD. If the result is good, we move forward in time, if result is bad, we move past in time. Always shorting the gap by the half of time. The results for this exercise are as follow:
 
-```sql
-SELECT TOP (50) *
-FROM LabCriticalDB_StopAt.app.Orders
-ORDER BY OrderCreatedAt DESC;
-```
+| Sequence | StopAt | Result |
+|-------|-------|--------|
+|1|	10:00:00.000	|[GOOD](images/ERP_10_00.JPG)|
+|2|	12:00:00.000	|BAD| 
+|3|   11:00:00.000   |BAD| 
+|4|	10:30:00.000	|BAD|
+|5|	10:15:00.000	|GOOD|
+|6|	10:20:00.000	|GOOD| 
+|7|	10:25:00.000	|GOOD|
+|8|	10:27:00.000	|BAD|
+|9|	10:26:00.000	|BAD|
+|10|	10:25:30.000	|BAD|
+|11|	10:25:15.000	|BAD|
+|12|	10:25:07.000	|GOOD|
+|13|	10:25:10.000	|GOOD|
+|14|	10:25:12.000	|BAD|
+|15|	10:25:11.000	|BAD|
+|16|	10:25:10.500	|GOOD|
+|17|	10:25:10.250	|GOOD|
+
+### Final STOPAT
+`2026-04-13 10:25:10.250`
+
+This represents the most accurate good last known valid state before corruption for `app.Orders` if this is a mid-high transactional table
 
 ### Data Comparison (Production vs Restored)
 ```sql
