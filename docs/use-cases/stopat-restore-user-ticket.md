@@ -1,7 +1,7 @@
 <p align="center">
 <a href="../../README.md">Home</a> |
 <a href="../architecture.md">Architecture</a> |
-<a href="../examples/examples.md">Examples</a>
+<a href="use-cases.md">Use Cases</a>
 </p>
 
 # STOPAT Restore & Targeted Data Repair for User Incident
