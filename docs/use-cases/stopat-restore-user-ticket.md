@@ -169,22 +169,22 @@ We close the gap by testing the state GOOD vs BAD. If the result is good, we mov
 | Sequence | StopAt | Result |
 |-------|-------|--------|
 |1|	10:00:00.000	|[GOOD](images/ERP_10_00.JPG)|
-|2|	12:00:00.000	|BAD| 
-|3|   11:00:00.000   |BAD| 
-|4|	10:30:00.000	|BAD|
-|5|	10:15:00.000	|GOOD|
-|6|	10:20:00.000	|GOOD| 
-|7|	10:25:00.000	|GOOD|
-|8|	10:27:00.000	|BAD|
-|9|	10:26:00.000	|BAD|
-|10|	10:25:30.000	|BAD|
-|11|	10:25:15.000	|BAD|
-|12|	10:25:07.000	|GOOD|
-|13|	10:25:10.000	|GOOD|
-|14|	10:25:12.000	|BAD|
-|15|	10:25:11.000	|BAD|
-|16|	10:25:10.500	|GOOD|
-|17|	10:25:10.250	|GOOD|
+|2|	12:00:00.000	|[BAD](images/ERP_12_00.JPG)| 
+|3|   11:00:00.000   |[BAD](images/ERP_11_00.JPG)| 
+|4|	10:30:00.000	|[BAD](images/ERP_10_30.JPG)|
+|5|	10:15:00.000	|[GOOD](images/ERP_10_15.JPG)|
+|6|	10:20:00.000	|[GOOD](images/ERP_10_20.JPG)| 
+|7|	10:25:00.000	|[GOOD](images/ERP_10_25.JPG)|
+|8|	10:27:00.000	|[BAD](images/ERP_10_27.JPG)|
+|9|	10:26:00.000	|[BAD](images/ERP_10_26.JPG)|
+|10|	10:25:30.000	|[BAD](images/ERP_10_25_30.JPG)|
+|11|	10:25:15.000	|[BAD](images/ERP_10_25_15.JPG)|
+|12|	10:25:07.000	|[GOOD](images/ERP_10_25_07.JPG)|
+|13|	10:25:10.000	|[GOOD](images/ERP_10_25_10.JPG)|
+|14|	10:25:12.000	|[BAD](images/ERP_10_25_12.JPG)|
+|15|	10:25:11.000	|[BAD](images/ERP_10_25_11.JPG)|
+|16|	10:25:10.500	|[GOOD](images/ERP_10_25_10_500.JPG)|
+|17|	10:25:10.250	|[GOOD](images/ERP_10_25_10_250.JPG)|
 
 ### Final STOPAT
 `2026-04-13 10:25:10.250`
