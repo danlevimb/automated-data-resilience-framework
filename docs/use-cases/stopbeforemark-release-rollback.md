@@ -107,6 +107,7 @@ COMMIT;
 <p align="center">
   <img src="images/Mark_Creation.jpg" width="900">
 </p>
+> Must not exist records after 15:43:08
 
 ### Execution Timeline
 |Time |	Event |
@@ -163,31 +164,13 @@ DBG Ended at     =[2026-04-14 15:57:31.1557538]
 DBG Procedure    =[cfg].[usp_RestorePointInTime]: SUCCESSFULLY RUN! IN 23.147 seconds.
 ------------------------------
 ```
+### Validate New state 
 
-SELECT TOP (20)
-    OrderID, Amount, OrderCreatedAt
-FROM LabCriticalDB_StopBeforeMark.app.Orders
-ORDER BY OrderCreatedAt DESC;
+<p align="center">
+  <img src="images/Mark_Applied.jpg" width="900">
+</p>
 
-### Validation Logic
 
-The restored database must satisfy:
-
-DATA BEFORE MARK → EXISTS ✅
-MARK TRANSACTION → NOT APPLIED ❌
-POST-RELEASE DATA → NOT PRESENT ❌
-Validation Queries
-Compare Production vs Restored
-SELECT 
-    p.OrderID,
-    p.Amount AS ProductionAmount,
-    r.Amount AS RestoredAmount
-FROM LabCriticalDB.app.Orders p
-JOIN LabCriticalDB_StopBeforeMark.app.Orders r
-    ON p.OrderID = r.OrderID
-WHERE ISNULL(p.Amount,0) <> ISNULL(r.Amount,0);
-
-📸 [INSERT SCREENSHOT]
 
 Key Insights
 Transaction marks provide logical recovery boundaries
