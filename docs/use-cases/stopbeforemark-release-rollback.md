@@ -171,49 +171,51 @@ DBG Procedure    =[cfg].[usp_RestorePointInTime]: SUCCESSFULLY RUN! IN 23.147 se
   <img src="images/Mark_Applied.JPG" width="900">
 </p>
 
+> Max record date: 15:40:03
 
+### Key Insights
+- Transaction marks provide logical recovery boundaries
+- STOPBEFOREMARK eliminates ambiguity present in time-based recovery
+- This approach aligns database recovery with business events
+- It is ideal for release rollback scenarios
 
-Key Insights
-Transaction marks provide logical recovery boundaries
-STOPBEFOREMARK eliminates ambiguity present in time-based recovery
-This approach aligns database recovery with business events
-It is ideal for release rollback scenarios
-Why STOPBEFOREMARK Was Required
+### Why STOPBEFOREMARK Was Required
 
 Time-based recovery introduces approximation and uncertainty.
 
 Transaction mark-based recovery allows:
 
-deterministic rollback
-exact alignment with deployment boundaries
-safer recovery in controlled operations
-Integration with Release Process
+- deterministic rollback
+- exact alignment with deployment boundaries
+- safer recovery in controlled operations
+
+### Integration with Release Process
 
 Transaction marks can be integrated into deployment workflows:
 
-pre-release mark creation
-deployment execution
-rollback capability via STOPBEFOREMARK
+- pre-release mark creation
+- deployment execution
+- rollback capability via STOPBEFOREMARK
 
 This enables a robust and auditable release strategy.
 
-Summary
+### Summary
 
 This use case demonstrates:
 
-precise recovery using transaction marks
-rollback of release changes
-alignment of database recovery with release engineering
+- precise recovery using transaction marks
+- rollback of release changes
+- alignment of database recovery with release engineering
 
 It highlights the importance of combining:
 
-backup strategy
-transaction marking
-deterministic restore logic
+- backup strategy
+- transaction marking
+- deterministic restore logic
 
 to achieve reliable and predictable recovery outcomes.
 
-Final Outcome
+### Final Outcome
 
 ✔ Release rollback successfully executed
 ✔ Environment restored to pre-release state
