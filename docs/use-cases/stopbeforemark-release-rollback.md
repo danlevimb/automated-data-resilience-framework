@@ -93,13 +93,12 @@ VALID STATE ───▶ [MARK] ───▶ RELEASE ───▶ BROKEN STATE
               STOPBEFOREMARK
 Marker Creation (Simulated)
 ```
-### Mark creation
+### Marker creation 
 ```sql
 BEGIN TRAN Release_2026_04 WITH MARK N'Release_2026_04';
 
 -- Simulated release changes
-UPDATE app.Orders
-SET Amount = Amount * 1;
+UPDATE app.Orders SET Amount = Amount * 1.15;
 
 COMMIT;
 ```
@@ -108,7 +107,7 @@ COMMIT;
   <img src="images/Mark_Creation.jpg" width="900">
 </p>
 
-> Must not exist records after 15:43:08
+> No records should exist beyond the marker timestamp (15:43:08), confirming that all post-release changes were successfully excluded.
 
 ### Execution Timeline
 |Time |	Event |
