@@ -83,15 +83,6 @@ This scenario uses `STOPBEFOREMARK` instead of: `STOPAT`
 | STOPAT |	Approximate |	Incident recovery|
 | STOPBEFOREMARK |	Exact|	Controlled events (releases, deployments)|
 
-### Execution Timeline
-|Time |	Event |
-|-----|-------|
-|10:00|	System stable|
-|15:43|	Transaction mark created|
-|16:00|	Release scripts executed|
-|17:00|	Data inconsistencies appear|
-|18:00|	QA reports issue|
-
 ### Timeline Visualization
 ```text 
 TIME ─────────────────────────────────────────▶
@@ -117,6 +108,15 @@ COMMIT;
   <img src="images/Mark_Creation.jpg" width="900">
 </p>
 
+### Execution Timeline
+|Time |	Event |
+|-----|-------|
+|15:00|	System stable|
+|15:43|	Transaction mark created|
+|16:00|	Release scripts executed|
+|17:00|	Data inconsistencies appear|
+|18:00|	QA reports issue|
+
 ### Restore Execution
 
 ```sql
@@ -136,20 +136,40 @@ SELECT @RunID AS N'@RunID'
 SELECT 'Return Value' = @return_value
 GO
 ```
+```text
+------------------------------
+DBG Procedure =[cfg].[usp_RestorePointInTime]
+DBG Mode      =[STOPBEFOREMARK]
+DBG SourceDB  =[LabCriticalDB]
+DBG TargetDB  =[LabCriticalDB_StopBeforeMark]
+DBG Started at=[2026-04-14 15:57:08.008]
+ 
+DBG Stop Mark =[Release_2026_04]
+DBG Mark LSN  =[75000002576800512]
+DBG Mark Time =[2026-04-14 15:43:08.230]
+ 
+1.0: >>> RESTORE-CHAIN SUCCESSFULLY BUILT >>> 
+3.1: >>> RESTORING... >>>
+...
+3.15: >>> RESTORING... >>>
+RESTORE LOG [LabCriticalDB_StopBeforeMark] FROM DISK = N'C:\BD\Backup\PRIMARY\LabCriticalDB_LOG_20260414_1555036017622.trn' WITH STOPBEFOREMARK = N'Release_2026_04', RECOVERY;
+Processed 0 pages for database 'LabCriticalDB_StopBeforeMark', file 'LabCriticalDB' on file 1.
+Processed 320 pages for database 'LabCriticalDB_StopBeforeMark', file 'LabCriticalDB_log' on file 1.
+RESTORE LOG successfully processed 320 pages in 0.182 seconds (13.736 MB/sec).
+4.0: >>> SET DATABASE ACCES MULTI-USER >>> 
+4.1: >>> CHECK NEWLY-RESTORED DATABASE >>> 
+ 
+DBG Ended at     =[2026-04-14 15:57:31.1557538]
+DBG Procedure    =[cfg].[usp_RestorePointInTime]: SUCCESSFULLY RUN! IN 23.147 seconds.
+------------------------------
+```
 
-
-
-Evidence — Restored State
-
-📸 [INSERT SCREENSHOT]
-
-SELECT TOP (50)
-    OrderID,
-    Amount,
-    OrderCreatedAt
+SELECT TOP (20)
+    OrderID, Amount, OrderCreatedAt
 FROM LabCriticalDB_StopBeforeMark.app.Orders
 ORDER BY OrderCreatedAt DESC;
-Validation Logic
+
+### Validation Logic
 
 The restored database must satisfy:
 
