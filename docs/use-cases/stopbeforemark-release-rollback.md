@@ -12,7 +12,7 @@
 
 This use case demonstrates a **deterministic rollback strategy** using transaction marks (`STOPBEFOREMARK`) to recover a database to a precise logical point.
 
-Unlike time-based recovery (STOPAT), this approach enables:
+Unlike time-based recovery (`STOPAT`), this approach enables:
 
 - exact rollback to a known business event  
 - deterministic recovery without approximation  
