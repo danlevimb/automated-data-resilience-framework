@@ -107,6 +107,7 @@ COMMIT;
 <p align="center">
   <img src="images/Mark_Creation.jpg" width="900">
 </p>
+
 > Must not exist records after 15:43:08
 
 ### Execution Timeline
