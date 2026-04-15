@@ -4,7 +4,7 @@
 <a href="../examples/examples.md">Examples</a>
 </p>
 
-# STOPBEFOREMARK Restore for Release Rollback
+# Restore a pre-production environment using `STOPBEFOREMARK` for release purposes.
 
 ---
 
