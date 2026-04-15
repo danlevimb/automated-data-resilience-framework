@@ -4,7 +4,7 @@
 <a href="use-cases.md">Use Cases</a>
 </p>
 
-# Recover data after accidental update (STOPAT)
+# Recover data after accidental update
 
 ---
 
