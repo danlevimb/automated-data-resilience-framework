@@ -3,7 +3,7 @@
 <a href="../architecture.md">Architecture</a>
 </p>
 
-# Use Cases
+# Use cases
 
 ## Overview
 
