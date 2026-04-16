@@ -1,15 +1,13 @@
-# Framework Tables
-
 <p align="center">
 <a href="/README.md">Home</a> |
 <a href="/sql/02_Procedures.md">Procedures</a> |
-<a href="/docs/telemetry.md">Telemetry</a> |
-<a href="/docs/restore-workflow.md">Restore Workflow</a>
+<a href="/docs/telemetry.md">Architecture</a> |
+<a href="/docs/restore-workflow.md">Evidence</a>
 </p>
 
----
+# Tables
 
-This section contains the table-level documentation for the Automated Backup & Recovery Framework, grouped by functional area.
+This section contains the table-level documentation of the framework, grouped by functional area.
 
 ## Configuration
 Configuration tables define the policy, tiering, and storage settings used by the framework.
