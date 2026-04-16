@@ -16,9 +16,7 @@ The goal is to validate that the system:
 - Maintains operational consistency  
 - Avoids unnecessary or redundant executions  
 
----
-
-# Overview
+### Overview
 
 The scheduler operates under a **trigger-based model**:
 
@@ -27,7 +25,6 @@ The scheduler operates under a **trigger-based model**:
   - Decisions are made dynamically using:
   - Configuration ([`[cfg].[Tier]`](../../sql/01_Tables/cfg.Tier.md), [`[cfg].[DatabasePolicy]`](../../sql/01_Tables/cfg.DatabasePolicy.md))  
   - Execution history ([`[log].[BackupRun]`](../../sql/01_Tables/log.BackupRun.md))  
-
 ### Execution
 
 ```sql
@@ -35,8 +32,8 @@ EXEC cfg.usp_RunScheduledBackups
     @DryRun = 1,
     @Debug = 1;
 ```
----
-# Scenarios
+
+### Scenarios
   - [1 — No Backup Due](scheduler-behavior-1.md)
   - [2 — LOG Backup Due](scheduler-behavior-2.md)
   - [3 — FULL Backup Due](scheduler-behavior-3.md)
@@ -50,14 +47,14 @@ EXEC cfg.usp_RunScheduledBackups
 
 --- 
 
-# Key Observations
+### Key Observations
   - Decisions are made at runtime, not predefined
   - Backup execution is demand-driven
   - System adapts instantly to configuration changes
   - Operational cadence is preserved
   - Concurrency and integrity constraints are enforced
 
-# Conclusion
+### Conclusion
 
 The scheduler behaves as a dynamic decision engine, not a static job executor.
 
