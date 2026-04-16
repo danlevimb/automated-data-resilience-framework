@@ -1,9 +1,9 @@
 <p align="center">
 <a href="../../README.md">Home</a> |
-<a href="../examples/examples.md">Examples</a>
+<a href="evidence.md">Back</a>
 </p>
 
-# Backup Execution Evidence
+# Backup Execution
 
 This section provides real execution evidence of the framework operating under a **policy-driven scheduling model**.
 
@@ -14,11 +14,7 @@ The objective is to demonstrate that backup operations are:
 - Properly recorded in telemetry  
 - Consistent with expected operational cadence  
 
----
-
-# Scenario
-
-## Policy Configuration
+## Scenario - Policy Configuration
 
 - Tier 0 (Critical)
   - FULL: Daily  
@@ -27,8 +23,6 @@ The objective is to demonstrate that backup operations are:
 
 - Scheduler:
   - SQL Server Agent Job executes every **5 minutes**
-
----
 
 # Step 1 — Decision Engine (Dry Run)
 
@@ -67,7 +61,7 @@ This confirms that:
 - Backup cadence is evaluated dynamically
 - No unnecessary operations are scheduled
 
-# Step 2 — Execute Scheduler
+### Step 2 — Execute Scheduler
 
 Run the scheduler in execution mode:
 
@@ -77,12 +71,12 @@ EXEC cfg.usp_RunScheduledBackups
     @Debug = 1;
 ```
 
-### Expected Behavior
+Expected Behavior
 - Only databases with due backups are processed
 - Backup type is selected per database
 - Each execution is grouped by CorrelationID
 
-# Step 3 — Backup Files Generated
+### Step 3 — Backup Files Generated
 
 The framework generates backup files in configured storage paths.
 
@@ -92,7 +86,7 @@ The framework generates backup files in configured storage paths.
   <img src="images/Backup_Execution_Evidence_Step3.JPG" width="900">
 </p>
 
-### Focus on:
+Focus on:
 
 - File naming convention
 - Timestamp consistency
@@ -109,20 +103,14 @@ This demonstrates that:
 - The scheduler preserves operational cadence
 - Backup execution is aligned with RPO objectives
 
-# Step 4 — Telemetry Verification
+### Step 4 — Telemetry Verification
 
 Validate execution through telemetry tables.
 
 ```sql
 SELECT TOP (20)
-    BackupRunID,
-    DatabaseName,
-    BackupType,
-    StartedAt,
-    EndedAt,
-    Succeeded,
-    CorrelationID,
-    PrimaryFile
+    BackupRunID, DatabaseName, BackupType, StartedAt, EndedAt,
+    Succeeded, CorrelationID, PrimaryFile
 FROM log.BackupRun
 ORDER BY BackupRunID DESC;
 ```
@@ -133,15 +121,13 @@ ORDER BY BackupRunID DESC;
   <img src="images/Backup_Execution_Evidence_Step4_1.JPG" width="900">
 </p>
 
-### Interpretation
-
 Key observations:
 - Multiple databases share the same CorrelationID → single scheduler execution
 - Execution timestamps are consistent with scheduler trigger
 - BackupType reflects correct decision logic (FULL / DIFF / LOG)
 - Succeeded = 1 confirms successful execution
 
-# Step 5 — Correlation Analysis
+### Step 5 — Correlation Analysis
 
 Each scheduler execution generates a unique CorrelationID.
 
@@ -151,14 +137,12 @@ Each scheduler execution generates a unique CorrelationID.
   <img src="images/Backup_Execution_Evidence_Step5.JPG" width="900">
 </p>
 
-### Interpretation
-
 This confirms that:
 - The framework groups operations per execution cycle
 - Execution traceability is preserved
 - Multi-database operations are logically linked
 
-# Step 6 — Cadence Validation
+### Step 6 — Cadence Validation
 
 Review LOG backup timing:
 
@@ -176,8 +160,6 @@ ORDER BY StartedAt DESC;
   <img src="images/Backup_Execution_Evidence_Step6.JPG" width="900">
 </p>
 
-### Interpretation
-
 Observed pattern:
 - LOG backups executed at consistent intervals
 - FULL backups do not reset LOG cadence
@@ -186,14 +168,14 @@ This validates:
 - Stable RPO enforcement
 - Continuous recoverability coverage
 
-# Key Observations
+### Key Observations
 - Backup decisions are made dynamically at runtime
 - Execution is aligned with policy configuration
 - No redundant backups are generated
 - Telemetry provides full traceability
 - LOG cadence remains consistent even after FULL execution
 
-# Conclusion
+### Conclusion
 
 This execution demonstrates that the framework:
 - Operates as a policy-driven scheduling system
