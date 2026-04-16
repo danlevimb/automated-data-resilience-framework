@@ -1,13 +1,9 @@
-# Framework Stored Procedures
-
 <p align="center">
 <a href="/README.md">Home</a> |
-<a href="/sql/01_Tables.md">Tables</a> |
-<a href="/docs/telemetry.md">Telemetry</a> |
-<a href="/docs/restore-workflow.md">Restore Workflow</a>
+<a href="/sql/01_Tables.md">Tables</a>
 </p>
 
----
+# Procedures 
 
 This section contains the stored procedures that implement the core logic of the Automated Backup & Recovery Framework, grouped by functional responsibility.
 
