@@ -1,8 +1,6 @@
 <p align="center">
 <a href="/README.md">Home</a> |
-<a href="/sql/02_Procedures.md">Procedures</a> |
-<a href="/docs/telemetry.md">Architecture</a> |
-<a href="/docs/restore-workflow.md">Evidence</a>
+<a href="/sql/02_Procedures.md">Procedures</a>
 </p>
 
 # Tables
