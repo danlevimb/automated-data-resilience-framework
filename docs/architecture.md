@@ -1,6 +1,6 @@
 <p align="center">
 <a href="../README.md">Home</a> |
-<a href="telemetry.md">Evidence</a> |
+<a href="evidence/evidence.md">Evidence</a> |
 <a href="use-cases/use'cases.md">Use cases</a>
 </p>
 
