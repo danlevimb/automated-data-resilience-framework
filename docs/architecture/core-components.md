@@ -1,6 +1,6 @@
 <p align="center">
 <a href="../../README.md">Home</a> |
-<a href="../architecture.md">Back</a>
+<a href="../architecture.md">Back</a> |
 <a href="/docs/architecture/core-components.md">Core components</a> |
 </p>
 
