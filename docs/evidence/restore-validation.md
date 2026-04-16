@@ -1,9 +1,9 @@
 <p align="center">
 <a href="../../README.md">Home</a> |
-<a href="../examples/examples.md">Examples</a>
+<a href="evidence.md">Examples</a>
 </p>
 
-# Restore Validation Evidence
+# Restore Validation
 
 This section demonstrates the framework’s ability to perform **deterministic recovery validation** using controlled restore scenarios and data-level verification.
 
@@ -14,11 +14,7 @@ The objective is to prove that:
 - Data state matches expected conditions after recovery  
 - Recovery is not assumed, but **verified with evidence**  
 
----
-
-# Scenario
-
-## Validation Strategy
+## Scenario - Validation Strategy
 
 The framework uses a [**canary-based validation model**](references/canary-validation-model.md):
 
@@ -36,29 +32,28 @@ Then:
 | SOURCE DATABASE |    1   |   1  |   1   |
 | TARGET DATABASE |    1   |   0  |   0   |
 
----
 
-# Step 1 — Execute Restore Validation
+### Step 1 — Execute Restore Validation
 
 Run the orchestration procedure:
 
 ```sql
 DECLARE	@return_value int
 
-EXEC	@return_value = [cfg].[usp_RunRestoreTests]
-		@DatabaseList = 'LabCriticalDB',
-		@PrimaryDir = 'C:\BD\Backup\PRIMARY\',
-		@SecondaryDir = 'C:\BD\Backup\SECONDARY\',
-		@UseMirror = 0,
-		@DoCheckDB = 1,
-		@ReplaceTarget = 1,
-		@KeepTargetDb = 1,
-		@Debug = 1
+EXEC	@return_value = 	[cfg].[usp_RunRestoreTests]
+		@DatabaseList = 	'LabCriticalDB',
+		@PrimaryDir = 		'C:\BD\Backup\PRIMARY\',
+		@SecondaryDir = 	'C:\BD\Backup\SECONDARY\',
+		@UseMirror = 		0,
+		@DoCheckDB = 		1,
+		@ReplaceTarget = 	1,
+		@KeepTargetDb = 	1,
+		@Debug = 			1
 
 SELECT	'Return Value' = @return_value
 ```
 
-### Expected Behavior
+Expected Behavior:
 
 The procedure:
 - Inserts canary records
@@ -120,11 +115,12 @@ DBG Ended at     =[2026-04-08 12:37:52.5555420] IN 8.861 seconds.
  
 ------------------------------
 ```
-# Step 2 — Canary Generation
+### Step 2 — Canary Generation
 
 The framework creates controlled markers in the source database.
 
 🔍 Evidence: Canarys created at Source Database
+
 ```sql
 SELECT *
 FROM [LabCriticalDB].dbo.PitrCanary
@@ -135,14 +131,12 @@ ORDER BY CreatedAt DESC;
   <img src="images/Restore_Validation_Evidence_Step2_1.jpg" width="900">
 </p>
 
-### Interpretation
-
 This confirms that:
 - The recovery boundary is clearly defined
 - The test scenario is deterministic
 - The restore validation has a measurable reference
 
-# Step 3 — Restore Execution
+### Step 3 — Restore Execution
 
 The framework executes a restore using:
 - FULL backup
@@ -156,7 +150,7 @@ The framework executes a restore using:
   <img src="images/Restore_Validation_Evidence_Step3_1.jpg" width="900">
 </p>
 
-## Output console:
+Output console:
 
 ```text
 ------------------------------
@@ -201,9 +195,7 @@ DBG Procedure    =[cfg].[usp_RestorePointInTime]: SUCCESSFULLY RUN! IN 7.839 sec
 ------------------------------
 ```
 
-# Step 4 — Data-Level Validation
-
-Validate the restored database:
+### Step 4 — Data-Level Validation
 
 ```sql
 SELECT *
@@ -211,25 +203,24 @@ FROM [LabCriticalDB_RestoreTest].dbo.PitrCanary
 ORDER BY CreatedAt DESC;
 ```
 
-🔍 Source Canary Table
+🔍 Evidence: Source & Target Canary Tables
 
 <p align="center">
   <img src="images/Restore_Validation_Evidence_Step2_1.jpg" width="900">
 </p>
 
-🔍 Target Canary Table
 <p align="center">
   <img src="images/Restore_Validation_Evidence_Step4.jpg" width="900">
 </p>
 
-### Interpretation
+Interpretation
 
 This confirms that:
 - The restore stopped at the correct boundary
 - No data beyond the mark was applied
 - The recovery point is precise and deterministic
 
-# Step 5 — Telemetry Verification
+### Step 5 — Telemetry Verification
 
 Review restore execution records:
 
@@ -283,31 +274,26 @@ ORDER BY RestoreRunID, StepOrder;
   <img src="images/Restore_Validation_Evidence_Step5.jpg" width="900">
 </p>
 
-### Interpretation
-
 Key observations:
 - Restore chain is fully recorded
 - Each step contains LSN and timing data
 - Errors (if any) are captured
 - Canary validation results are stored
 
-# Step 6 — Canary Validation Result
+### Step 6 — Canary Validation Result
 
 If using integrated validation:
 
-
 ```sql
 SELECT
-    CanaryBeforeName,
-    CanaryMarkName,
-    CanaryAfterName,
-    CanaryPassed,
-    CanaryMessage
+    CanaryBeforeName, CanaryMarkName, CanaryAfterName,
+	CanaryPassed, CanaryMessage
 FROM log.RestoreTestRun
 ORDER BY StartedAt DESC;
 ```
 
 🔍 Evidence: Validation Outcome
+
 |Column| Value|
 |-----|------|
 |CanaryBeforeName|	PITR_BEFORE_BEA539F35BF345B999F97590F637CDC0|
@@ -316,10 +302,9 @@ ORDER BY StartedAt DESC;
 |CanaryPassed|	1|
 |CanaryMessage|	PITR Canary VALID: STOPBEFOREMARK respected. BEFORE exists in target; MARK and AFTER are absent.|
   
-# Step 7 — Manual Validation (Optional)
+### Step 7 — Manual Validation (Optional)
 
 Run validation independently:
-
 ```sql
 EXEC cfg.usp_ValidatePitrCanary
     @SourceDB = 'LabCriticalDB',
@@ -327,8 +312,7 @@ EXEC cfg.usp_ValidatePitrCanary
     @Token = 'BEA539F35BF345B999F97590F637CDC0';
 ```
 
-## Output console:
-
+ Output console:
 ```text
 ------------------------------
 DBG Procedure    =[cfg].[usp_ValidatePitrCanary]
@@ -351,14 +335,14 @@ DBG Procedure    =[cfg].[usp_ValidatePitrCanary]: SUCCESSFULLY RUN! IN 0.000 sec
 ------------------------------
 ```
 
-# Key Observations
+### Key Observations
 - Restore chains are correctly constructed and executed
 - Recovery boundaries are precisely respected
 - Data-level validation confirms correctness
 - Canary model provides deterministic verification
 - Telemetry captures full execution trace
 
-# Conclusion
+### Conclusion
 
 This execution demonstrates that the framework:
 
