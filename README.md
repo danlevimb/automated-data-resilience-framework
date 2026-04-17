@@ -1,4 +1,4 @@
-# SQL Server Backup & Recovery Framework
+# SQL Server Recovery & Validation Framework
 Deterministic recovery & validation for real-world data incidents.
 
 ---
