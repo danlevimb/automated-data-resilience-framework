@@ -15,7 +15,7 @@ CREATE OR ALTER PROCEDURE [cfg].[usp_GetLatestBackupFiles]
 AS
 /*==============================================================================
   Procedure : cfg.usp_GetLatestBackupFiles
-  Project   : Automated Backup & Recovery Framework
+  Project   : SQL Server Recovery & Validation Framework
   Author    : Dan Levi Menchaca Bedolla
   Role      : SQL Server DBA / Data Infrastructure & Reliability Engineering
   Created   : 2026

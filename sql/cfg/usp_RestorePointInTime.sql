@@ -19,7 +19,7 @@ CREATE OR ALTER PROCEDURE [cfg].[usp_RestorePointInTime]
 AS
 /*==============================================================================
   Procedure : cfg.usp_RestorePointInTime
-  Project   : Automated Backup & Recovery Framework
+  Project   : SQL Server Recovery & Validation Framework
   Author    : Dan Levi Menchaca Bedolla
   Role      : SQL Server DBA / Data Infrastructure & Reliability Engineering
   Created   : 2026
@@ -72,14 +72,12 @@ BEGIN
     -- INPUT VARIABLES (FOR DEBUG-MODE DE-COMENTARIZE)
     ---------------------------------------------------------------------------
     --DECLARE 
-    --@SourceDB       SYSNAME = 'AdventureWorks2022',
-    --@TargetDB       SYSNAME = 'AdventureWorks2022_RestoreTest',
-
-    ---- @StopAtDate     DATETIME2(3) = N'2026-03-04 10:00:00.000',
-    --@StopAtDate     DATETIME2(3) = NULL,
-    ----@StopAtDate              DATETIME2(7) = N'2026-02-11 12:25:00.000',     -- Fecha y hora de paro, usado solo cuando @StopBeforeMark es NULL
-    --@StopBeforeMark NVARCHAR(128) = 'RT_158202348',   -- Marcador de paro; al usarse, se ignora la fecha especificada en @StopAt
-    ---- @StopBeforeMark      NVARCHAR(128) = NULL,   -- Marcador de paro; al usarse, se ignora la fecha especificada en @StopAt
+    --@SourceDB       SYSNAME = 'LabCriticalDB',
+    --@TargetDB       SYSNAME = 'LabCriticalDB_StopAt_T1',    
+    ---- @StopAtDate     DATETIME2(3) = NULL,
+    --@StopAtDate              DATETIME2(7) = N'2026-04-13 10:50:00.000',     -- Fecha y hora de paro, usado solo cuando @StopBeforeMark es NULL
+    ---- @StopBeforeMark NVARCHAR(128) = 'RT_158202348',   -- Marcador de paro; al usarse, se ignora la fecha especificada en @StopAt
+    --@StopBeforeMark      NVARCHAR(128) = NULL,   -- Marcador de paro; al usarse, se ignora la fecha especificada en @StopAt
     --@DoCheckDB      BIT = 1,
     --@ReplaceTarget  BIT = 1,
     --@Debug          BIT = 1,
@@ -282,7 +280,10 @@ BEGIN
             IF @BackupType = 'LOG'
                 IF @StopMode = N'STOPAT'
                     IF @IsStopAtDate = 1
-                        SET @Sql = N'RESTORE LOG ' + QUOTENAME(@TargetDB) + N' FROM DISK = N''' + REPLACE(@FileNAme, '''', '''''') + N''' ' + N'WITH STOPAT = @pStopAt, RECOVERY;';
+                        SET @Sql = 
+                            N'RESTORE LOG ' + QUOTENAME(@TargetDB) + 
+                            N' FROM DISK = N''' + REPLACE(@FileName, '''', '''''') + N''' ' +
+                            N'WITH STOPAT = N''' + CONVERT(NVARCHAR(23), @StopAtForSelection, 121) + N''', RECOVERY;';
                     ELSE
                         SET @Sql = N'RESTORE LOG ' + QUOTENAME(@TargetDB) + N' FROM DISK = N''' + REPLACE(@FileName, '''', '''''') + N''' ' + N'WITH NORECOVERY;';
                 ELSE
@@ -352,7 +353,7 @@ BEGIN
         ---------------------------------------------------------------------
         -- C) EXECUTE TSQL
         ---------------------------------------------------------------------        
-        BEGIN
+        BEGIN                        
             DECLARE curExec CURSOR LOCAL FAST_FORWARD FOR SELECT StepOrder, TSQL FROM #RestoreChain ORDER BY StepOrder;
 
             OPEN curExec;
@@ -371,7 +372,7 @@ BEGIN
                 IF @Debug = 1 PRINT @Sql;
                 BEGIN TRY                                    
                     /* LOOK HOW @pStopAt IS ALWAYS SENT AS A PARAMETER; EVEN QUERY DOES NOT USE IT */
-                    EXEC sys.sp_executesql @Sql, N'@pStopAt datetime2(3)', @pStopAt = @StopAtForSelection;
+                    EXEC sys.sp_executesql @Sql;
 
                     UPDATE #RestoreChain SET Executed = 1, ExecEndedAt  = SYSDATETIME() WHERE StepOrder = @StepOrder;               
                 END TRY
