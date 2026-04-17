@@ -1,9 +1,5 @@
-<p align="center">
-  <h1 align="center">SQL Server Data Recovery Framework</h1>
-  <p align="center">
-    Deterministic recovery, validation, and repair for real-world data incidents.
-  </p>
-</p>
+# SQL Server Backup & Recovery Framework
+Deterministic recovery & validation for real-world data incidents.
 
 ---
 
@@ -12,7 +8,7 @@
 In most environments:
 
 - backups are successfully generated  
-- recovery is rarely tested  
+- recovery is assumed and rarely tested  
 - incident response relies on guesswork  
 
 When failure occurs, teams often cannot answer:
@@ -63,18 +59,6 @@ This framework operates on:
 
 ---
 
-## Real-World Scenarios
-
-The framework is validated through practical [use cases](/docs/use-cases/use-cases.md):
-
-- Accidental data corruption (UPDATE without WHERE)  
-- Release rollback using transaction marks  
-- Recovery under uncertainty and delayed detection  
-
-These scenarios simulate **real production incidents**, not theoretical examples.
-
----
-
 ## Repository Structure
 
 | Section | Description |
@@ -90,7 +74,7 @@ These scenarios simulate **real production incidents**, not theoretical examples
 ## Design Principles
 
 - Deterministic recovery over best-effort approaches  
-- Non-destructive repair strategies  
+- Example of Non-destructive repair strategies  
 - Evidence-driven validation  
 - Alignment with operational workflows  
 
@@ -114,15 +98,6 @@ Recovery must be:
 
 ## Summary
 
-This project demonstrates how to move from:
+This project focuses on improving recovery strategies by minimizing the time required to determine the correct recovery point after a failure.
 
-❌ “We have backups”  
-to  
-✔ “We can recover — reliably, precisely, and safely”  
-
----
-
-## Final Thought
-
-Reliable systems are not defined by how often they fail,  
-but by how predictably they recover.
+Restore chain construction should not rely on manual effort or guesswork. It can be deterministic, reliable, and fully automated.
